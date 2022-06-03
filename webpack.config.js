@@ -5,7 +5,7 @@ module.exports = {
     mode: "development",
     entry: [
         './src/app.js',
-        './src/style.scss'
+        './src/scss/style.scss'
     ],
     output: {
         filename: 'application.js',
