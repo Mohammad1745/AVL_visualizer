@@ -8,5 +8,8 @@ export default {
     selectedTrees: ['avl'],
     sliderMin: 5,
     sliderMax: 30,
-    sliderValue: 10
+    sliderValue: 10,
+    keys: [20, 30, 10, 35, 40, 15, 45, 38, 42, 25, 5],
+    animation: [],
+    bstRoot: {},
 }
