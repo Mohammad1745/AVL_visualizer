@@ -1,8 +1,10 @@
 @import "config";
+@import url('https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap');
 
 body {
   margin: 0;
   padding: 0;
+  font-family: 'Kdam Thmor Pro', sans-serif;
 }
 #app {
   min-height: 100vh;
@@ -59,6 +61,7 @@ body {
   &__git-link {
     @include primary-btn;
     text-decoration: none;
+    font-family: 'Kdam Thmor Pro', sans-serif;
 
     &:hover {
       background: $buttonBackgroundHover;
