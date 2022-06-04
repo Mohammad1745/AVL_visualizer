@@ -58,10 +58,12 @@ let avl = {
             if (isBalanced) continue
             if(node.bf > 1) {
                 if(node.left && node.left.bf>0){
-                    console.log(node, "LL rotate")
+                    node = avl.rotateLL (node)
+                    isBalanced = true
                 }
                 if(node.left && node.left.bf<0){
-                    console.log(node, "LR rotate")
+                    node = avl.rotateLR (node)
+                    isBalanced = true
                 }
             }
             else if(node.bf < -1){
@@ -70,7 +72,8 @@ let avl = {
                     isBalanced = true
                 }
                 if(node.right && node.right.bf>0){
-                    console.log(node, "RL rotate")
+                    node = avl.rotateRL (node)
+                    isBalanced = true
                 }
             }
         }
@@ -107,12 +110,29 @@ let avl = {
             return Math.max(leftHeight, rightHeight) + 1
         }
     },
+    rotateLL: node => {
+        let parent = node.parent
+        let left = node.left
+        let right = node.right
+        let leftOfParent = parent ? parent.left : null
+        let rightOfParent = parent ? parent.right : null
+        let leftOfLeft = node.left.left
+        let rightOfLeft = node.left.right
+
+        let newNode = {...left}
+        newNode.right = {...node}
+        newNode.right.left = {...rightOfLeft}
+        if (parent) newNode.parent = {...parent}
+        node = {...newNode}
+        node.parent.left = {...newNode}
+        return node
+    },
     rotateRR: node => {
         let parent = node.parent
         let left = node.left
         let right = node.right
-        let leftOfParent = parent.left
-        let rightOfParent = parent.right
+        let leftOfParent = parent ? parent.left : null
+        let rightOfParent = parent ? parent.right : null
         let leftOfRight = node.right.left
         let rightOfRight = node.right.right
 
@@ -123,7 +143,49 @@ let avl = {
         node = {...newNode}
         node.parent.right = {...newNode}
         return node
-    }
+    },
+    rotateLR: node => {
+        let parent = node.parent
+        let left = node.left
+        let right = node.right
+        let leftOfParent = parent ? parent.left : null
+        let rightOfParent = parent ? parent.right : null
+        let leftOfLeft = node.left.left
+        let rightOfLeft = node.left.right
+        let leftOfRightOfLeft = node.left.right.left
+        let rightOfRightOfLeft = node.left.right.right
+
+        let newNode = {...rightOfLeft}
+        newNode.left = {...left}
+        newNode.right = {...node}
+        newNode.left.right = {...leftOfRightOfLeft}
+        newNode.right.left = {...rightOfRightOfLeft}
+        if (parent) newNode.parent = {...parent}
+        node = {...newNode}
+        node.parent.left = {...newNode}
+        return node
+    },
+    rotateRL: node => {
+        let parent = node.parent
+        let left = node.left
+        let right = node.right
+        let leftOfParent = parent ? parent.left : null
+        let rightOfParent = parent ? parent.right : null
+        let leftOfRight = node.right.left
+        let rightOfRight = node.right.right
+        let leftOfLeftOfRight = node.right.left.left
+        let rightOfLeftOfRight = node.right.left.right
+
+        let newNode = {...leftOfRight}
+        newNode.right = {...right}
+        newNode.left = {...node}
+        newNode.right.left = {...rightOfLeftOfRight}
+        newNode.left.right = {...leftOfLeftOfRight}
+        if (parent) newNode.parent = {...parent}
+        node = {...newNode}
+        node.parent.right = {...newNode}
+        return node
+    },
 }
 
 export default avl
