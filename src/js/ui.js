@@ -56,10 +56,10 @@ function loadTreeOptions() {
 function loadFooterContents() {
     let footer = document.getElementById('footer')
     footer.innerHTML = `
-            <a class="footer__git-link" href="https://github.com/Mohammad1745/sorting_algorithm_visualizer" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-            <div class="footer__dev-info">
-                <i class="fas fa-user"> Mohammad Ali</i>
-                <i class="fas fa-envelope ml-2"> mdali2016.227@gmail.com</i>
-            </div>
+        <a class="footer__git-link" href="https://github.com/Mohammad1745/sorting_algorithm_visualizer" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        <div class="footer__dev-info">
+            <i class="fas fa-user"> Mohammad Ali</i>
+            <i class="fas fa-envelope ml-2"> mdali2016.227@gmail.com</i>
+        </div>
     `
 }
