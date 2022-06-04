@@ -1,5 +1,9 @@
 @import "config";
 
+body {
+  margin: 0;
+  padding: 0;
+}
 #app {
   min-height: 100vh;
   display: flex;
@@ -18,10 +22,7 @@
   }
 
   &__visualize-btn {
-    border: none;
-    border-radius: .25rem;
-    background: $buttonBackground;
-    color: white;
+    @include primary-btn;
     height: 2.5rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
@@ -40,6 +41,35 @@
 
   &__tree-options {
     display: flex;
+    gap: 1rem;
+  }
+}
+
+.visualizer {
+  padding: 0.5vw 10vw;
+  flex-grow: 1;
+}
+
+.footer {
+  padding: 0.5vw 10vw;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid white;
+
+  &__git-link {
+    @include primary-btn;
+    text-decoration: none;
+
+    &:hover {
+      background: $buttonBackgroundHover;
+      cursor: pointer;
+    }
+  }
+
+  &__dev-info {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     gap: 1rem;
   }
 }

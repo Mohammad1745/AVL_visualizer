@@ -1,3 +1,13 @@
 $backgroundColor: #343a40;
 $buttonBackground: #007bff;
 $buttonBackgroundHover: #007bdd;
+
+@mixin primary-btn {
+  border: none;
+  border-radius: .25rem;
+  background: $buttonBackground;
+  color: white;
+  padding: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
