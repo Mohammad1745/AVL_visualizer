@@ -25,6 +25,11 @@
     height: 2.5rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+
+    &:hover {
+      background: $buttonBackgroundHover;
+      cursor: pointer;
+    }
   }
 }
 
