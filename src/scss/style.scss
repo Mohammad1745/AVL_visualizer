@@ -16,6 +16,16 @@
     font-size: 1.25rem;
     font-weight: bold;
   }
+
+  &__visualize-btn {
+    border: none;
+    border-radius: .25rem;
+    background: $buttonBackground;
+    color: white;
+    height: 2.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
 }
 
 .subheader {
