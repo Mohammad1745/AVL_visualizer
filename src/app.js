@@ -1,9 +1,9 @@
 import config from "./js/config"
 import loadUi from "./js/ui"
-import bst from "./js/bst"
+import avl from "./js/avl"
 
 document.addEventListener('DOMContentLoaded', () => {
     loadUi()
-    bst.create(config.keys, config.animation)
-    console.log(config.bstRoot, "result")
+    avl.create(config.keys, config.animation)
+    console.log(config.avlRoot, "result")
 })

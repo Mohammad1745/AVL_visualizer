@@ -12,4 +12,5 @@ export default {
     keys: [20, 30, 10, 35, 40, 15, 45, 38, 42, 25, 5],
     animation: [],
     bstRoot: {},
+    avlRoot: {},
 }
