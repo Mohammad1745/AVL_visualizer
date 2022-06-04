@@ -106,6 +106,23 @@ let avl = {
             let rightHeight = avl.getHeight(node.right)
             return Math.max(leftHeight, rightHeight) + 1
         }
+    },
+    rotateRR: node => {
+        let parent = node.parent
+        let left = node.left
+        let right = node.right
+        let leftOfParent = parent.left
+        let rightOfParent = parent.right
+        let leftOfRight = node.right.left
+        let rightOfRight = node.right.right
+
+        let newNode = {...right}
+        newNode.left = {...node}
+        newNode.left.right = {...leftOfRight}
+        if (parent) newNode.parent = {...parent}
+        node = {...newNode}
+        node.parent.right = {...newNode}
+        return node
     }
 }
 
