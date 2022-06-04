@@ -10,32 +10,68 @@ let avl = {
     }),
     create: (input, animation) => {
         input.map(key => {
-            config.avlRoot = avl.insertNode(config.avlRoot, key)
+            let output = avl.insertNode(config.avlRoot, key)
+            config.avlRoot = output.node
             config.avlRoot = avl.getBalanceFactor(config.avlRoot)
+            config.avlRoot = avl.balanceTree(output.lastNode)
         })
     },
 
     insertNode: (node, key) => {
+        let lastNode = {}
         if(!Object.keys(node).length) {
             node = avl.node()
             node.data = key
+            lastNode = node
         }
         else if (key<node.data) {
             if (node.left) {
-                node.left = avl.insertNode(node.left, key)
+                let output = avl.insertNode(node.left, key)
+                node.left = output.node
+                lastNode = output.lastNode
             }
             else {
                 node.left = avl.node(node)
                 node.left.data = key
+                lastNode = node.left
             }
         }
         else if (key>node.data) {
             if (node.right) {
-                node.right = avl.insertNode(node.right, key)
+                let output = avl.insertNode(node.right, key)
+                node.right = output.node
+                lastNode = output.lastNode
             }
             else {
                 node.right = avl.node(node)
                 node.right.data = key
+                lastNode = node.right
+            }
+        }
+        return {node, lastNode}
+    },
+    balanceTree: (lastNode) => {
+        let node = lastNode
+        let isBalanced = false
+        while (node.parent) {
+            node = node.parent
+            if (isBalanced) continue
+            if(node.bf > 1) {
+                if(node.left && node.left.bf>0){
+                    console.log(node, "LL rotate")
+                }
+                if(node.left && node.left.bf<0){
+                    console.log(node, "LR rotate")
+                }
+            }
+            else if(node.bf < -1){
+                if(node.right && node.right.bf<0){
+                    node = avl.rotateRR (node)
+                    isBalanced = true
+                }
+                if(node.right && node.right.bf>0){
+                    console.log(node, "RL rotate")
+                }
             }
         }
         return node
@@ -46,8 +82,8 @@ let avl = {
             return null
         }
         else {
-            if(node.left) bf += avl.getHeight(node.left)
-            if(node.right) bf -= avl.getHeight(node.right)
+            if(node.left) bf += (avl.getHeight(node.left)+1)
+            if(node.right) bf -= (avl.getHeight(node.right)+1)
             node.bf = bf
             if(node.left) node.left = avl.getBalanceFactor(node.left)
             if(node.right) node.right = avl.getBalanceFactor(node.right)
