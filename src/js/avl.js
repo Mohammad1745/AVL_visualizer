@@ -1,7 +1,7 @@
 import config from "./config"
 
 let avl = {
-    node: (parent=null, data=null) => ({
+    node: (data, parent=null) => ({
         parent,
         left: null,
         right: null,
@@ -9,45 +9,41 @@ let avl = {
         bf: 0
     }),
     create: (input, animation) => {
-        // input.map(key => {
-        //     let output = avl.insertNode(config.avlRoot, key)
-        //     config.avlRoot = output.node
-        //     config.avlRoot = avl.getBalanceFactor(config.avlRoot)
-        //     config.avlRoot = avl.balanceTree(output.lastNode)
-        // })
         let node = {}
+        let lastNode = {}
         for (let i=0; i<input.length; i++) {
             if(i===0) node = avl.node(input[i])
             else {
-                let lastNode = {}
-                avl.insertNode(node, lastNode, input[i])
+                lastNode = avl.insertNode(node, input[i])
                 avl.getBalanceFactor(node)
-                // avl.balanceTree(node, lastNode)
+                console.log({...node}, {...lastNode})
+                node = avl.balanceTree(lastNode)
             }
-            console.log({...node})
         }
         return node
     },
 
-    insertNode: (node, lastNode, key) => {
+    insertNode: (node, key) => {
+        let lastNode = {}
         if (key<node.data) {
             if (node.left && Object.keys(node.left).length) {
-                avl.insertNode(node.left, lastNode, key)
+                lastNode = avl.insertNode(node.left, key)
             }
             else {
-                node.left = avl.node(node, key)
-                lastNode = node.left
+                node.left = avl.node(key, node)
+                lastNode = {...node.left}
             }
         }
         else if (key>node.data) {
             if (node.right && Object.keys(node.right).length) {
-                avl.insertNode(node.right, lastNode, key)
+                lastNode = avl.insertNode(node.right, key)
             }
             else {
-                node.right = avl.node(node, key)
-                lastNode = node.right
+                node.right = avl.node(key, node)
+                lastNode = {...node.right}
             }
         }
+        return lastNode
     },
     getBalanceFactor: node => {
         let bf = 0
@@ -80,28 +76,29 @@ let avl = {
         }
     },
     balanceTree: (lastNode) => {
-        let node = {...lastNode}
+        let node = lastNode
         let isBalanced = false
         while (node.parent) {
             node = node.parent
+            console.log('current', node)
             if (isBalanced) continue
             if(node.bf > 1) {
-                if(node.left && node.left.bf>0){
-                    node = avl.rotateLL (node)
+                if(avl.isNode(node.left) && node.left.bf>0){
+                    avl.rotateLL (node)
                     isBalanced = true
                 }
-                if(node.left && node.left.bf<0){
-                    node = avl.rotateLR (node)
+                if(avl.isNode(node.left) && node.left.bf<0){
+                    avl.rotateLR (node)
                     isBalanced = true
                 }
             }
             else if(node.bf < -1){
-                if(node.right && node.right.bf<0){
-                    node = avl.rotateRR (node)
+                if(avl.isNode(node.right) && node.right.bf<0){
+                    avl.rotateRR (node)
                     isBalanced = true
                 }
-                if(node.right && node.right.bf>0){
-                    node = avl.rotateRL (node)
+                if(avl.isNode(node.right) && node.right.bf>0){
+                    avl.rotateRL (node)
                     isBalanced = true
                 }
             }
@@ -109,37 +106,44 @@ let avl = {
         return node
     },
     rotateLL: node => {
+        console.log('ll', {...node})
         let parent = node.parent
         let left = node.left
+        let right = node.right
+        let leftOfLeft = node.left.left
         let rightOfLeft = node.left.right
 
-        let newNode = {...left}
-        newNode.right = {...node}
-        newNode.right.left = {...rightOfLeft}
-        if (parent) newNode.parent = parent
-        node = newNode
+        let newNode = avl.node(left.data, parent)
+        newNode.right = node
+        newNode.left = leftOfLeft
+        newNode.right.left = rightOfLeft
+        newNode.left.parent = newNode
+        newNode.right.parent = newNode
+
         if (parent) {
-            if (newNode.data<parent.data) node.parent.left = node
-            else node.parent.right = node
+            if (newNode.data<parent.data) parent.left = newNode
+            else parent.right = newNode
         }
-        return node
     },
     rotateRR: node => {
+        console.log('rr', {...node})
         let parent = node.parent
         let left = node.left
         let right = node.right
         let leftOfRight = node.right.left
+        let rightOfRight = node.right.right
 
-        let newNode = {...right}
-        newNode.left = {...node}
-        newNode.left.right = {...leftOfRight}
-        if (parent) newNode.parent = parent
-        node = newNode
+        let newNode = avl.node(right.data, parent)
+        newNode.left = node
+        newNode.right = rightOfRight
+        newNode.left.right = leftOfRight
+        newNode.left.parent = newNode
+        newNode.right.parent = newNode
+
         if (parent) {
-            if (newNode.data<parent.data) node.parent.left = node
-            else node.parent.right = node
+            if (newNode.data<parent.data) parent.left = newNode
+            else parent.right = newNode
         }
-        return node
     },
     rotateLR: node => {
         let parent = node.parent
@@ -159,7 +163,6 @@ let avl = {
             if (newNode.data<parent.data) node.parent.left = node
             else node.parent.right = node
         }
-        return node
     },
     rotateRL: node => {
         let parent = node.parent
@@ -179,8 +182,8 @@ let avl = {
             if (newNode.data < parent.data) node.parent.left = node
             else node.parent.right = node
         }
-        return node
     },
+    isNode: node => node && Object.keys(node).length > 0
 }
 
 export default avl
