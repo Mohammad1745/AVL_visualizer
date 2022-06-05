@@ -51,7 +51,7 @@ let avl = {
         return {node, lastNode}
     },
     balanceTree: (lastNode) => {
-        let node = lastNode
+        let node = {...lastNode}
         let isBalanced = false
         while (node.parent) {
             node = node.parent
@@ -113,44 +113,38 @@ let avl = {
     rotateLL: node => {
         let parent = node.parent
         let left = node.left
-        let right = node.right
-        let leftOfParent = parent ? parent.left : null
-        let rightOfParent = parent ? parent.right : null
-        let leftOfLeft = node.left.left
         let rightOfLeft = node.left.right
 
         let newNode = {...left}
         newNode.right = {...node}
         newNode.right.left = {...rightOfLeft}
-        if (parent) newNode.parent = {...parent}
-        node = {...newNode}
-        node.parent.left = {...newNode}
+        if (parent) newNode.parent = parent
+        node = newNode
+        if (parent) {
+            if (newNode.data<parent.data) node.parent.left = node
+            else node.parent.right = node
+        }
         return node
     },
     rotateRR: node => {
         let parent = node.parent
-        let left = node.left
         let right = node.right
-        let leftOfParent = parent ? parent.left : null
-        let rightOfParent = parent ? parent.right : null
         let leftOfRight = node.right.left
-        let rightOfRight = node.right.right
 
         let newNode = {...right}
         newNode.left = {...node}
         newNode.left.right = {...leftOfRight}
-        if (parent) newNode.parent = {...parent}
-        node = {...newNode}
-        node.parent.right = {...newNode}
+        if (parent) newNode.parent = parent
+        node = newNode
+        if (parent) {
+            if (newNode.data<parent.data) node.parent.left = node
+            else node.parent.right = node
+        }
         return node
     },
     rotateLR: node => {
         let parent = node.parent
         let left = node.left
-        let right = node.right
-        let leftOfParent = parent ? parent.left : null
-        let rightOfParent = parent ? parent.right : null
-        let leftOfLeft = node.left.left
         let rightOfLeft = node.left.right
         let leftOfRightOfLeft = node.left.right.left
         let rightOfRightOfLeft = node.left.right.right
@@ -160,19 +154,18 @@ let avl = {
         newNode.right = {...node}
         newNode.left.right = {...leftOfRightOfLeft}
         newNode.right.left = {...rightOfRightOfLeft}
-        if (parent) newNode.parent = {...parent}
-        node = {...newNode}
-        node.parent.left = {...newNode}
+        if (parent) newNode.parent = parent
+        node = newNode
+        if (parent) {
+            if (newNode.data<parent.data) node.parent.left = node
+            else node.parent.right = node
+        }
         return node
     },
     rotateRL: node => {
         let parent = node.parent
-        let left = node.left
         let right = node.right
-        let leftOfParent = parent ? parent.left : null
-        let rightOfParent = parent ? parent.right : null
         let leftOfRight = node.right.left
-        let rightOfRight = node.right.right
         let leftOfLeftOfRight = node.right.left.left
         let rightOfLeftOfRight = node.right.left.right
 
@@ -181,9 +174,12 @@ let avl = {
         newNode.left = {...node}
         newNode.right.left = {...rightOfLeftOfRight}
         newNode.left.right = {...leftOfLeftOfRight}
-        if (parent) newNode.parent = {...parent}
-        node = {...newNode}
-        node.parent.right = {...newNode}
+        if (parent) newNode.parent = parent
+        node = newNode
+        if (parent) {
+            if (newNode.data < parent.data) node.parent.left = node
+            else node.parent.right = node
+        }
         return node
     },
 }
