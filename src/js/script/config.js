@@ -1,4 +1,4 @@
-export default {
+let config = {
     headerBrand: 'AVL Tree Visualizer',
     visualizerButtonText: 'Visualize',
     trees: [
@@ -15,5 +15,7 @@ export default {
     bstRoot: {},
     avlRoot: {},
     modes: {initial: 1, sorting: 2, done:3},
-    mode: this.initial
 }
+config.mode = config.modes.initial
+
+export default config

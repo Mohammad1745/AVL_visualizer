@@ -6,9 +6,12 @@ import avl from "./js/data_structure/avl"
 
 document.addEventListener('DOMContentLoaded', () => {
     loadUi()
-    config.bstRoot = bst.create(config.keys, config.bstAnimation)
+    let bstOutput = bst.create(config.keys)
+    config.bstRoot = bstOutput.node
+    config.bstAnimation = bstOutput.animation
     console.log(config.bstRoot, "BST result")
-    config.avlRoot = avl.create(config.keys, config.avlAnimation)
-    console.log(config.avlRoot, "AVL result")
+    console.log(config.bstAnimation, "BST Animation")
+    // config.avlRoot = avl.create(config.keys, config.avlAnimation)
+    // console.log(config.avlRoot, "AVL result")
     handleUiEvents()
 })

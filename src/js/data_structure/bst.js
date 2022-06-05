@@ -6,13 +6,14 @@ let bst = {
         data,
         bf: 0
     }),
-    create: (input, animation) => {
+    create: (input) => {
         let node = {}
+        let animation = []
         for (let i=0; i<input.length; i++) {
             if(i===0) node = bst.node(input[i])
             else bst.insertNode(node, input[i])
         }
-        return node
+        return {node, animation}
     },
 
     insertNode: (node, key) => {
