@@ -1,4 +1,5 @@
 import config from "./config"
+import {generateArray} from "./helper";
 
 export default function loadUi() {
     let app = document.getElementById('app')
@@ -18,9 +19,10 @@ function loadHeaderContents() {
     header.innerHTML = `
         <div id="header_brand" class="header__brand">${config.headerBrand}</div>
         <div id="header_range_slider" class="header__range-slider"></div>
-        <button id="header_visualize_btn" class="header__visualize-btn">${config.visualizerButtonText}</button>
+        <div id="header_buttons" class="header__buttons"></div>
     `
     loadRangeSlider()
+    loadHeaderButtons()
 }
 
 function loadRangeSlider() {
@@ -31,17 +33,26 @@ function loadRangeSlider() {
     `
 }
 
+function loadHeaderButtons() {
+    let headerButtons = document.getElementById('header_buttons')
+    headerButtons.innerHTML = `
+        <button id="header_visualize_btn" class="header__buttons__visualize-btn">${config.visualizerButtonText}</button>
+        <button id="header_reset_btn" class="header__buttons__reset-btn"><i class="fas fa-redo"></i></button>
+    `
+}
+
 function loadSubheaderContents() {
     let subheader = document.getElementById('subheader')
     subheader.innerHTML = `        
         <div id="subheader_tree_options" class="subheader__tree-options"></div>
-        <div id="subheader_keys" class="subheader_keys"></div>
+        <div id="subheader_keys" class="subheader__keys"></div>
     `
     loadTreeOptions()
+    loadKeyList()
 }
 
 function loadTreeOptions() {
-    let subheader = document.getElementById('subheader_tree_options')
+    let treeOptions = document.getElementById('subheader_tree_options')
     config.trees.map(tree => {
         let checkBoxInput = `
             <div class="subheader__checkbox">
@@ -49,8 +60,16 @@ function loadTreeOptions() {
                 <span class="subheader__checkbox__option-title" >${tree.title}</span>
             </div>  
         `
-        subheader.insertAdjacentHTML('beforeend', checkBoxInput)
+        treeOptions.insertAdjacentHTML('beforeend', checkBoxInput)
     })
+}
+function loadKeyList() {
+    config.keys = generateArray(config.sliderValue)
+    let keys = document.getElementById('subheader_keys')
+    let keyList = `<div><span>Keys: </span>`
+    for (let i=0; i<config.keys.length; i++) keyList += `<span id="key_${i}" class="subheader__keys__item inserted">${config.keys[i]}</span>`
+    keyList += `</div>`
+    keys.innerHTML = keyList
 }
 
 function loadFooterContents() {

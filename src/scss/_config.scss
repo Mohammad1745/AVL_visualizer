@@ -1,11 +1,23 @@
 $backgroundColor: #343a40;
-$buttonBackground: #007bff;
-$buttonBackgroundHover: #007bdd;
+$buttonBackgroundPrimary: #007bff;
+$buttonBackgroundPrimaryHover: #007bdd;
+$buttonBackgroundDanger: #cc006b;
+$buttonBackgroundDangerHover: #bb006b;
 
 @mixin primary-btn {
   border: none;
   border-radius: .25rem;
-  background: $buttonBackground;
+  background: $buttonBackgroundPrimary;
+  color: white;
+  padding: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  font-family: 'Kdam Thmor Pro', sans-serif;
+}
+@mixin danger-btn {
+  border: none;
+  border-radius: .25rem;
+  background: $buttonBackgroundDanger;
   color: white;
   padding: 0.5rem;
   font-weight: bold;

@@ -23,15 +23,29 @@ body {
     font-weight: bold;
   }
 
-  &__visualize-btn {
-    @include primary-btn;
-    height: 2.5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+  &__buttons {
+    &__visualize-btn {
+      @include primary-btn;
+      height: 2.5rem;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
 
-    &:hover {
-      background: $buttonBackgroundHover;
-      cursor: pointer;
+      &:hover {
+        background: $buttonBackgroundPrimaryHover;
+        cursor: pointer;
+      }
+    }
+    &__reset-btn{
+      @include danger-btn;
+      height: 2.5rem;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      margin-left: 0.5rem;
+
+      &:hover {
+        background: $buttonBackgroundDangerHover;
+        cursor: pointer;
+      }
     }
   }
 }
@@ -40,10 +54,25 @@ body {
   padding: 0.5vw 10vw;
   border-top: 1px solid white;
   border-bottom: 1px solid white;
+  display: flex;
+  justify-content: space-between;
 
   &__tree-options {
     display: flex;
     gap: 1rem;
+  }
+
+  &__keys {
+    &__item {
+      border-radius: .5rem;
+      border: 1px solid gray;
+      padding: 0.25rem;
+      margin: 0.25rem;
+    }
+
+    .inserted {
+      background: gray;
+    }
   }
 }
 
@@ -64,7 +93,7 @@ body {
     font-family: 'Kdam Thmor Pro', sans-serif;
 
     &:hover {
-      background: $buttonBackgroundHover;
+      background: $buttonBackgroundPrimaryHover;
       cursor: pointer;
     }
   }
