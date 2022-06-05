@@ -1,7 +1,5 @@
-import config from "./config"
-
 let bst = {
-    node: (parent=null, data=null) => ({
+    node: (data, parent=null) => ({
         parent,
         left: null,
         right: null,
@@ -13,7 +11,6 @@ let bst = {
         for (let i=0; i<input.length; i++) {
             if(i===0) node = bst.node(input[i])
             else bst.insertNode(node, input[i])
-            console.log(node)
         }
         return node
     },
@@ -21,11 +18,11 @@ let bst = {
     insertNode: (node, key) => {
         if (key<node.data) {
             if (node.left) bst.insertNode(node.left, key)
-            else node.left = bst.node(node, key)
+            else node.left = bst.node(key, node)
         }
         else if (key>node.data) {
             if (node.right) bst.insertNode(node.right, key)
-            else node.right = bst.node(node, key)
+            else node.right = bst.node(key, node)
         }
     }
 }
