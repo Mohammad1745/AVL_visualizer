@@ -36,8 +36,8 @@ function loadRangeSlider() {
 function loadHeaderButtons() {
     let headerButtons = document.getElementById('header_buttons')
     headerButtons.innerHTML = `
-        <button id="header_visualize_btn" class="header__buttons__visualize-btn">${config.visualizerButtonText}</button>
-        <button id="header_reset_btn" class="header__buttons__reset-btn"><i class="fas fa-redo"></i></button>
+        <button id="visualize_btn" class="header__buttons__visualize-btn">${config.visualizerButtonText}</button>
+        <button id="reset_btn" class="header__buttons__reset-btn"><i class="fas fa-redo"></i></button>
     `
 }
 

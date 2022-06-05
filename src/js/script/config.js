@@ -14,4 +14,6 @@ export default {
     avlAnimation: [],
     bstRoot: {},
     avlRoot: {},
+    modes: {initial: 1, sorting: 2, done:3},
+    mode: this.initial
 }
