@@ -1,5 +1,3 @@
-import config from "./config"
-
 let avl = {
     node: (data, parent=null) => ({
         parent,
@@ -146,41 +144,49 @@ let avl = {
         }
     },
     rotateLR: node => {
+        console.log('lr', {...node})
         let parent = node.parent
         let left = node.left
+        let right = node.right
+        let leftOfLeft = node.left.left
         let rightOfLeft = node.left.right
         let leftOfRightOfLeft = node.left.right.left
         let rightOfRightOfLeft = node.left.right.right
 
-        let newNode = {...rightOfLeft}
-        newNode.left = {...left}
-        newNode.right = {...node}
-        newNode.left.right = {...leftOfRightOfLeft}
-        newNode.right.left = {...rightOfRightOfLeft}
-        if (parent) newNode.parent = parent
-        node = newNode
+        let newNode = avl.node(rightOfLeft.data, parent)
+        newNode.right = node
+        newNode.left = left
+        newNode.left.right = leftOfRightOfLeft
+        newNode.right.left = rightOfRightOfLeft
+        newNode.left.parent = newNode
+        newNode.right.parent = newNode
+
         if (parent) {
-            if (newNode.data<parent.data) node.parent.left = node
-            else node.parent.right = node
+            if (newNode.data<parent.data) parent.left = newNode
+            else parent.right = newNode
         }
     },
     rotateRL: node => {
+        console.log('rl', {...node})
         let parent = node.parent
+        let left = node.left
         let right = node.right
         let leftOfRight = node.right.left
-        let leftOfLeftOfRight = node.right.left.left
+        let rightOfRight = node.right.right
         let rightOfLeftOfRight = node.right.left.right
+        let leftOfLeftOfRight = node.right.left.left
 
-        let newNode = {...leftOfRight}
-        newNode.right = {...right}
-        newNode.left = {...node}
-        newNode.right.left = {...rightOfLeftOfRight}
-        newNode.left.right = {...leftOfLeftOfRight}
-        if (parent) newNode.parent = parent
-        node = newNode
+        let newNode = avl.node(leftOfRight.data, parent)
+        newNode.left = node
+        newNode.right = right
+        newNode.left.right = leftOfLeftOfRight
+        newNode.right.left = rightOfLeftOfRight
+        newNode.left.parent = newNode
+        newNode.right.parent = newNode
+
         if (parent) {
-            if (newNode.data < parent.data) node.parent.left = node
-            else node.parent.right = node
+            if (newNode.data<parent.data) parent.left = newNode
+            else parent.right = newNode
         }
     },
     isNode: node => node && Object.keys(node).length > 0
