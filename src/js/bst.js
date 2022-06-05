@@ -1,40 +1,32 @@
 import config from "./config"
 
 let bst = {
-    node: (parent=null) => ({
+    node: (parent=null, data=null) => ({
         parent,
         left: null,
         right: null,
-        data: null,
+        data,
         bf: 0
     }),
     create: (input, animation) => {
-        input.map(key => {
-            config.bstRoot = bst.insertNode(config.bstRoot, key)
-        })
+        let node = {}
+        for (let i=0; i<input.length; i++) {
+            if(i===0) node = bst.node(input[i])
+            else bst.insertNode(node, input[i])
+            console.log(node)
+        }
+        return node
     },
 
     insertNode: (node, key) => {
-        if(!Object.keys(node).length) {
-            node = bst.node()
-            node.data = key
-        }
-        else if (key<node.data) {
-            if (node.left) node.left = bst.insertNode(node.left, key)
-            else {
-                node.left = bst.node(node)
-                node.left.data = key
-            }
+        if (key<node.data) {
+            if (node.left) bst.insertNode(node.left, key)
+            else node.left = bst.node(node, key)
         }
         else if (key>node.data) {
-            if (node.right) node.right = bst.insertNode(node.right, key)
-            else {
-                node.right = bst.node(node)
-                node.right.data = key
-            }
+            if (node.right) bst.insertNode(node.right, key)
+            else node.right = bst.node(node, key)
         }
-
-        return node
     }
 }
 

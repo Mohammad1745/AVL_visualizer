@@ -1,83 +1,54 @@
 import config from "./config"
 
 let avl = {
-    node: (parent=null, data=null) => ({
+    node: (parent=null) => ({
         parent,
         left: null,
         right: null,
-        data,
+        data: null,
         bf: 0
     }),
     create: (input, animation) => {
-        // input.map(key => {
-        //     let output = avl.insertNode(config.avlRoot, key)
-        //     config.avlRoot = output.node
-        //     config.avlRoot = avl.getBalanceFactor(config.avlRoot)
-        //     config.avlRoot = avl.balanceTree(output.lastNode)
-        // })
-        let node = {}
-        for (let i=0; i<input.length; i++) {
-            if(i===0) node = avl.node(input[i])
-            else {
-                let lastNode = {}
-                avl.insertNode(node, lastNode, input[i])
-                avl.getBalanceFactor(node)
-                // avl.balanceTree(node, lastNode)
-            }
-            console.log({...node})
-        }
-        return node
+        input.map(key => {
+            let output = avl.insertNode(config.avlRoot, key)
+            config.avlRoot = output.node
+            config.avlRoot = avl.getBalanceFactor(config.avlRoot)
+            config.avlRoot = avl.balanceTree(output.lastNode)
+        })
     },
 
-    insertNode: (node, lastNode, key) => {
-        if (key<node.data) {
+    insertNode: (node, key) => {
+        let lastNode = {}
+        if(!Object.keys(node).length) {
+            node = avl.node()
+            node.data = key
+            lastNode = node
+        }
+        else if (key<node.data) {
             if (node.left && Object.keys(node.left).length) {
-                avl.insertNode(node.left, lastNode, key)
+                let output = avl.insertNode(node.left, key)
+                node.left = output.node
+                lastNode = output.lastNode
             }
             else {
-                node.left = avl.node(node, key)
+                node.left = avl.node(node)
+                node.left.data = key
                 lastNode = node.left
             }
         }
         else if (key>node.data) {
             if (node.right && Object.keys(node.right).length) {
-                avl.insertNode(node.right, lastNode, key)
+                let output = avl.insertNode(node.right, key)
+                node.right = output.node
+                lastNode = output.lastNode
             }
             else {
-                node.right = avl.node(node, key)
+                node.right = avl.node(node)
+                node.right.data = key
                 lastNode = node.right
             }
         }
-    },
-    getBalanceFactor: node => {
-        let bf = 0
-        if(!Object.keys(node).length) {
-            return null
-        }
-        else {
-            if(node.left) bf += (avl.getHeight(node.left)+1)
-            if(node.right) bf -= (avl.getHeight(node.right)+1)
-            node.bf = bf
-            if(node.left) avl.getBalanceFactor(node.left)
-            if(node.right) avl.getBalanceFactor(node.right)
-        }
-    },
-    getHeight: node => {
-        if (!node) return 0
-        if (!node.left && !node.right) return 0;
-        else if (!node.right) {
-            if (!node.left.left && !node.left.right) return 1
-            else return avl.getHeight(node.left) +1
-        }
-        else if (!node.left) {
-            if (!node.right.left && !node.right.right) return 1
-            else return avl.getHeight(node.right) +1
-        }
-        else {
-            let leftHeight = avl.getHeight(node.left)
-            let rightHeight = avl.getHeight(node.right)
-            return Math.max(leftHeight, rightHeight) + 1
-        }
+        return {node, lastNode}
     },
     balanceTree: (lastNode) => {
         let node = {...lastNode}
@@ -107,6 +78,37 @@ let avl = {
             }
         }
         return node
+    },
+    getBalanceFactor: node => {
+        let bf = 0
+        if(!Object.keys(node).length) {
+            return null
+        }
+        else {
+            if(node.left) bf += (avl.getHeight(node.left)+1)
+            if(node.right) bf -= (avl.getHeight(node.right)+1)
+            node.bf = bf
+            if(node.left) node.left = avl.getBalanceFactor(node.left)
+            if(node.right) node.right = avl.getBalanceFactor(node.right)
+        }
+        return node
+    },
+    getHeight: node => {
+        if (!node) return 0
+        if (!node.left && !node.right) return 0;
+        else if (!node.right) {
+            if (!node.left.left && !node.left.right) return 1
+            else return avl.getHeight(node.left) +1
+        }
+        else if (!node.left) {
+            if (!node.right.left && !node.right.right) return 1
+            else return avl.getHeight(node.right) +1
+        }
+        else {
+            let leftHeight = avl.getHeight(node.left)
+            let rightHeight = avl.getHeight(node.right)
+            return Math.max(leftHeight, rightHeight) + 1
+        }
     },
     rotateLL: node => {
         let parent = node.parent

@@ -9,7 +9,7 @@ export default {
     sliderMin: 5,
     sliderMax: 30,
     sliderValue: 10,
-    keys: [20, 30, 10, 35, 40, 15, 45, 38, 37, 36],//
+    keys: [10, 20, 30],//, 40, 50, 60, 70, 80, 99
     animation: [],
     bstRoot: {},
     avlRoot: {},
