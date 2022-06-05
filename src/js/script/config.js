@@ -5,7 +5,7 @@ export default {
         {key: 'bst', title: "BST"},
         {key: 'avl', title: "AVL"},
     ],
-    selectedTrees: ['avl'],
+    selectedTrees: ['bst', 'avl'],
     sliderMin: 5,
     sliderMax: 30,
     sliderValue: 10,

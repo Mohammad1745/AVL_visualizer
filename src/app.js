@@ -1,6 +1,6 @@
-import config from "./js/config"
-import loadUi from "./js/ui"
-import avl from "./js/avl"
+import config from "./js/script/config"
+import loadUi from "./js/script/ui"
+import avl from "./js/data_structure/avl"
 
 document.addEventListener('DOMContentLoaded', () => {
     loadUi()
