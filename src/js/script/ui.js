@@ -64,7 +64,7 @@ function loadTreeOptions() {
     })
 }
 function loadKeyList() {
-    config.keys = generateArray(config.sliderValue)
+    config.keys = generateArray(config.sliderValue, true)
     let keys = document.getElementById('subheader_keys')
     let keyList = `<div><span>Keys: </span>`
     for (let i=0; i<config.keys.length; i++) keyList += `<span id="key_${i}" class="subheader__keys__item inserted">${config.keys[i]}</span>`

@@ -10,20 +10,31 @@ let bst = {
         let node = {}
         let animation = []
         for (let i=0; i<input.length; i++) {
-            if(i===0) node = bst.node(input[i])
-            else bst.insertNode(node, input[i])
+            if(i===0) {
+                node = bst.node(input[i])
+                animation.push({index:i, parentIndex: null, direction: null})
+            }
+            else bst.insertNode(node, input, i, animation)
         }
         return {node, animation}
     },
 
-    insertNode: (node, key) => {
-        if (key<node.data) {
-            if (node.left) bst.insertNode(node.left, key)
-            else node.left = bst.node(key, node)
+    insertNode: (node, input, index, animation) => {
+        if (input[index]<node.data) {
+            if (node.left) bst.insertNode(node.left, input, index, animation)
+            else {
+                node.left = bst.node(input[index], node)
+                let parentIndex = input.indexOf(node.data)
+                animation.push({index, parentIndex, direction: 'l'})
+            }
         }
-        else if (key>node.data) {
-            if (node.right) bst.insertNode(node.right, key)
-            else node.right = bst.node(key, node)
+        else if (input[index]>node.data) {
+            if (node.right) bst.insertNode(node.right, input, index, animation)
+            else {
+                node.right = bst.node(input[index], node)
+                let parentIndex = input.indexOf(node.data)
+                animation.push({index, parentIndex, direction: 'r'})
+            }
         }
     }
 }

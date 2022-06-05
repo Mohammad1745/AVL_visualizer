@@ -1,9 +1,13 @@
-export function generateArray(length = 5) {
+export function generateArray(length = 5, unique = false) {
     let array = []
     for (let i=0; i<length; i++) {
-        array.push(randomNumber(1, 99))
+        let n = randomNumber(1, 99)
+        while (unique && array.includes(n)){
+            n = randomNumber(1, 99)
+        }
+        array.push(n)
     }
-    return array
+    return [...array]
 }
 
 export function switchElement (array, index1, index2) {

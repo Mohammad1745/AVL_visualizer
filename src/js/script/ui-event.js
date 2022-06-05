@@ -11,7 +11,7 @@ function handleSizeSlider () {
     sizeSlider.addEventListener('input', event => {
         if (config.mode===config.modes.initial||config.mode===config.modes.done){
             config.sliderValue = sizeSlider.value
-            config.keys = generateArray(config.sliderValue)
+            config.keys = generateArray(config.sliderValue, true)
             updateKeyList()
         }
     })
