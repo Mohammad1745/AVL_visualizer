@@ -4,14 +4,22 @@ import {sleep, getOffset, distanceBetweenPoints, slopAngleOfPoints} from "./help
 let bstVisualizer = {
     run:  async (rootNode, treeHeight, keys, animation) =>{
         let visualizerDom = document.getElementById('bst_visualizer')
-        visualizerDom.innerText = ''
-        bstVisualizer.plotNodeLocations(visualizerDom, treeHeight)
+        visualizerDom.innerHTML = `
+            <div id="bst_message" class="visualizer__bst__message"></div>
+            <div id="bst_plot_area" class="visualizer__bst__plot-area"></div>
+            `
+        let messageArea = visualizerDom.querySelector('#bst_message')
+        let plotArea = visualizerDom.querySelector('#bst_plot_area')
+        bstVisualizer.plotNodeLocations(plotArea, treeHeight)
         let keysPlotted = []
         for (let set of animation) {
             keysPlotted.push(config.keys[set.index])
+            messageArea.innerHTML = `<p class="message">BST Visualizer | Current Node: ${config.keys[set.index]}</p>`
             bstVisualizer.highLightPlottedKeys(keysPlotted)
+            await sleep(500)
             bstVisualizer.plotTrees(rootNode, keysPlotted)
-            await sleep(1000)
+            await sleep(500)
+            messageArea.innerHTML = `<p class="message">BST Visualizer | Plotting Done | Tree Height: ${treeHeight}</p>`
         }
     },
     plotNodeLocations: (visDom, treeHeight) => {

@@ -4,6 +4,12 @@ $buttonBackgroundPrimaryHover: #007bdd;
 $buttonBackgroundDanger: #cc006b;
 $buttonBackgroundDangerHover: #bb006b;
 
+@mixin borderBox {
+  border-radius: .5rem;
+  border: 1px solid gray;
+  padding: 0.25rem;
+  margin: 0.25rem;
+}
 @mixin primary-btn {
   border: none;
   border-radius: .25rem;

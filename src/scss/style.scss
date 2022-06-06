@@ -64,10 +64,7 @@ body {
 
   &__keys {
     &__item {
-      border-radius: .5rem;
-      border: 1px solid gray;
-      padding: 0.25rem;
-      margin: 0.25rem;
+      @include borderBox;
     }
 
     .inserted {
@@ -82,6 +79,11 @@ body {
 
   &__bst {
 
+  }
+
+  .message {
+    @include borderBox;
+    background: gray;
   }
 
   .row {
