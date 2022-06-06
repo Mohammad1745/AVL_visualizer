@@ -79,6 +79,41 @@ body {
 .visualizer {
   padding: 0.5vw 10vw;
   flex-grow: 1;
+
+  &__bst {
+
+  }
+
+  .row {
+    display: flex;
+    justify-content: center;
+    margin-top: 2vw;
+
+    .cell {
+      flex-grow: 1;
+      height: 2rem;
+      //border: 1px solid black;
+      display: flex;
+      justify-content: center;
+
+      .node {
+        height: 2rem;
+        width: 2rem;
+        border-radius: 50%;
+        background: gray;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .node-link {
+        margin: 0;
+        width: 1px;
+        border-radius: 0;
+        border: none;
+        background-color: white;
+      }
+    }
+  }
 }
 
 .footer {

@@ -9,8 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let bstOutput = bst.create(config.keys)
     config.bstRoot = bstOutput.node
     config.bstAnimation = bstOutput.animation
+    config.bstHeight = bstOutput.height
     console.log(config.bstRoot, "BST result")
     console.log(config.bstAnimation, "BST Animation")
+    console.log(config.bstHeight, "BST Height")
     // config.avlRoot = avl.create(config.keys, config.avlAnimation)
     // console.log(config.avlRoot, "AVL result")
     handleUiEvents()

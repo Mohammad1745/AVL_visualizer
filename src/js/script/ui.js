@@ -11,6 +11,7 @@ export default function loadUi() {
     `
     loadHeaderContents()
     loadSubheaderContents()
+    loadVisualizerContents()
     loadFooterContents()
 }
 
@@ -66,10 +67,18 @@ function loadTreeOptions() {
 function loadKeyList() {
     config.keys = generateArray(config.sliderValue, true)
     let keys = document.getElementById('subheader_keys')
-    let keyList = `<div><span>Keys: </span>`
-    for (let i=0; i<config.keys.length; i++) keyList += `<span id="key_${i}" class="subheader__keys__item inserted">${config.keys[i]}</span>`
+    let keyList = `<div><span>Keys(${config.sliderValue}): </span>`
+    for (let i=0; i<config.keys.length; i++) keyList += `<span id="key_${i}" class="subheader__keys__item">${config.keys[i]}</span>`
     keyList += `</div>`
     keys.innerHTML = keyList
+}
+
+function loadVisualizerContents() {
+    let visualizer = document.getElementById('visualizer')
+    visualizer.innerHTML = `        
+        <div id="bst_visualizer" class="visualizer__bst"></div>
+        <div id="avl_visualizer" class="visualizer__avl"></div>
+    `
 }
 
 function loadFooterContents() {

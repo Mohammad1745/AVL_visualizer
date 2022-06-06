@@ -61,3 +61,13 @@ export function getOffset(el) {
         top: rect.top + window.scrollY
     };
 }
+export function distanceBetweenPoints (p1, p2) {
+    let dx = p2.left - p1.left
+    let dy = p2.top - p1.top
+    return Math.hypot(dx, dy)
+}
+export function slopAngleOfPoints (p1, p2) {
+    let dx = p2.left - p1.left
+    let dy = p2.top - p1.top
+    return Math.atan2(dy, dx) * 180 / Math.PI;
+}

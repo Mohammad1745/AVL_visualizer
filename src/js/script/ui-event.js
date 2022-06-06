@@ -1,5 +1,7 @@
 import config from "./config"
 import {generateArray} from "./helper"
+import bst from "../data_structure/bst";
+import bstVisualizer from "./bst-visualizer";
 
 export default function handleUiEvents() {
     handleSizeSlider()
@@ -20,7 +22,7 @@ function handleSizeSlider () {
 function updateKeyList() {
     let keys = document.getElementById('subheader_keys')
     let keyList = `<div><span>Keys(${config.sliderValue}): </span>`
-    for (let i=0; i<config.keys.length; i++) keyList += `<span id="key_${i}" class="subheader__keys__item inserted">${config.keys[i]}</span>`
+    for (let i=0; i<config.keys.length; i++) keyList += `<span id="key_${i}" class="subheader__keys__item">${config.keys[i]}</span>`
     keyList += `</div>`
     keys.innerHTML = keyList
 }
@@ -59,9 +61,13 @@ function updateTreeOptions() {
 }
 function handleVisualizeButton() {
     let visualizeButton = document.getElementById('visualize_btn')
-    visualizeButton.addEventListener('click', () => {
+    visualizeButton.addEventListener('click', async () => {
         if (config.mode===config.modes.initial||config.mode===config.modes.done){
-            alert('Visualize')
+            let bstOutput = bst.create(config.keys)
+            config.bstRoot = bstOutput.node
+            config.bstAnimation = bstOutput.animation
+            config.bstHeight = bstOutput.height
+            await bstVisualizer.run(config.bstRoot, config.bstHeight, config.keys, config.bstAnimation)
         }
     })
 }
