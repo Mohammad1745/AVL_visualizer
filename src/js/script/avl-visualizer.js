@@ -5,22 +5,22 @@ let avlVisualizer = {
     run:  async (rootNode, treeHeight, keys, animation) =>{
         let visualizerDom = document.getElementById('avl_visualizer')
         visualizerDom.innerHTML = `
-            <div id="avl_message" class="visualizer__avl__message"></div>
+            <div id="avl_message" class="visualizer__avl__message">AVL Visualizer is under construction</div>
             <div id="avl_plot_area" class="visualizer__avl__plot-area"></div>
             `
-        let messageArea = visualizerDom.querySelector('#avl_message')
-        let plotArea = visualizerDom.querySelector('#avl_plot_area')
-        avlVisualizer.plotNodeLocations(plotArea, treeHeight)
-        let keysPlotted = []
-        for (let set of animation) {
-            keysPlotted.push(config.keys[set.index])
-            messageArea.innerHTML = `<p class="message">AVL Visualizer | Current Node: ${config.keys[set.index]}</p>`
-            avlVisualizer.highLightPlottedKeys(keysPlotted)
-            await sleep(500)
-            avlVisualizer.plotTrees(rootNode, keysPlotted)
-            await sleep(500)
-            messageArea.innerHTML = `<p class="message">AVL Visualizer | Plotting Done | Tree Height: ${treeHeight}</p>`
-        }
+        // let messageArea = visualizerDom.querySelector('#avl_message')
+        // let plotArea = visualizerDom.querySelector('#avl_plot_area')
+        // avlVisualizer.plotNodeLocations(plotArea, treeHeight)
+        // let keysPlotted = []
+        // for (let set of animation) {
+        //     keysPlotted.push(config.keys[set.index])
+        //     messageArea.innerHTML = `<p class="message">AVL Visualizer | Current Node: ${config.keys[set.index]}</p>`
+        //     avlVisualizer.highLightPlottedKeys(keysPlotted)
+        //     await sleep(500)
+        //     avlVisualizer.plotTrees(rootNode, keysPlotted)
+        //     await sleep(500)
+        //     messageArea.innerHTML = `<p class="message">AVL Visualizer | Plotting Done | Tree Height: ${treeHeight}</p>`
+        // }
     },
     plotNodeLocations: (visDom, treeHeight) => {
         let levels = ``
