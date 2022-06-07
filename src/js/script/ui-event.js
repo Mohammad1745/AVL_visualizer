@@ -2,6 +2,8 @@ import config from "./config"
 import {generateArray} from "./helper"
 import bst from "../data_structure/bst";
 import bstVisualizer from "./bst-visualizer";
+import avl from "../data_structure/avl";
+import avlVisualizer from "./avl-visualizer";
 
 export default function handleUiEvents() {
     handleSizeSlider()
@@ -63,11 +65,20 @@ function handleVisualizeButton() {
     let visualizeButton = document.getElementById('visualize_btn')
     visualizeButton.addEventListener('click', async () => {
         if (config.mode===config.modes.initial||config.mode===config.modes.done){
-            let bstOutput = bst.create(config.keys)
-            config.bstRoot = bstOutput.node
-            config.bstAnimation = bstOutput.animation
-            config.bstHeight = bstOutput.height
-            await bstVisualizer.run(config.bstRoot, config.bstHeight, config.keys, config.bstAnimation)
+            if (config.selectedTrees.includes('bst')){
+                let bstOutput = bst.create(config.keys)
+                config.bstRoot = bstOutput.node
+                config.bstAnimation = bstOutput.animation
+                config.bstHeight = bstOutput.height
+                await bstVisualizer.run(config.bstRoot, config.bstHeight, config.keys, config.bstAnimation)
+            }
+            if (config.selectedTrees.includes('avl')){
+                let avlOutput = avl.create(config.keys)
+                config.avlRoot = avlOutput.node
+                config.avlAnimation = avlOutput.animation
+                config.avlHeight = avlOutput.height
+                await avlVisualizer.run(config.avlRoot, config.avlHeight, config.keys, config.avlAnimation)
+            }
         }
     })
 }
