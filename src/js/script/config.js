@@ -5,11 +5,11 @@ let config = {
         {key: 'bst', title: "BST"},
         {key: 'avl', title: "AVL"},
     ],
-    selectedTrees: ['bst', 'avl'],
+    selectedTrees: ['avl'],
     sleepBase: 500,//ms
     sliderMin: 3,
     sliderMax: 15,
-    sliderValue: 7,
+    sliderValue: 9,
     keys: [],
     keysPlotted: [],
     bstAnimation: [],

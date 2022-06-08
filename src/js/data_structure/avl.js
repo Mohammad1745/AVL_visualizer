@@ -128,7 +128,8 @@ let avl = {
         avlArray[leftOfRightPtr] = avlSnapshot[rightOfLeftPtr]
 
         return {
-            type: 'll',
+            title: 'LL',
+            node: avlArray[ptr],
             movement: [
                 [ptr, rPtr],
                 [lPtr, ptr],
@@ -155,7 +156,8 @@ let avl = {
         avlArray[rightOfLeftPtr] = avlSnapshot[leftOfRightPtr]
 
         return {
-            type: 'rr',
+            title: 'RR',
+            node: avlArray[ptr],
             movement: [
                 [ptr, lPtr],
                 [rPtr, ptr],
@@ -186,7 +188,8 @@ let avl = {
         avlArray[rightOfRightOfLeftPtr] = null
 
         return {
-            type: 'lr',
+            title: 'LR',
+            node: avlArray[ptr],
             movement: [
                 [ptr, rPtr],
                 [rightOfLeftPtr, ptr],
@@ -218,7 +221,8 @@ let avl = {
         avlArray[rightOfLeftOfRightPtr] = null
 
         return {
-            type: 'rl',
+            title: 'RL',
+            node: avlArray[ptr],
             movement: [
                 [ptr, lPtr],
                 [leftOfRightPtr, ptr],

@@ -8,11 +8,13 @@ export default function loadUi() {
         <div id="subheader" class="subheader"></div>
         <div id="visualizer" class="visualizer"></div>
         <div id="footer" class="footer"></div>
+        <div id="overlay" class="overlay"></div>
     `
     loadHeaderContents()
     loadSubheaderContents()
     loadVisualizerContents()
     loadFooterContents()
+    loadOverlayContents()
 }
 
 function loadHeaderContents() {
@@ -89,5 +91,13 @@ function loadFooterContents() {
             <i class="fas fa-user"> Mohammad Ali</i>
             <i class="fas fa-envelope ml-2"> mdali2016.227@gmail.com</i>
         </div>
+    `
+}
+
+function loadOverlayContents() {
+    let overlay = document.getElementById('overlay')
+    overlay.innerHTML = `        
+        <div id="overlay_header" class="overlay__header"></div>
+        <div id="overlay_body" class="overlay__body"></div>
     `
 }

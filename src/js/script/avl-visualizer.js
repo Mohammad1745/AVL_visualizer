@@ -21,7 +21,7 @@ let avlVisualizer = {
                 avlVisualizer.highLightPlottedKeys(keysPlotted)
             } else {
                 messageArea.innerHTML = `<p class="message">AVL Visualizer | Rotation: ${set.rotation.type}</p>`
-                avlVisualizer.performRotation(set.rotation)
+                await avlVisualizer.performRotation(set.rotation)
             }
             await sleep(config.sleepBase)
             avlVisualizer.clearCells()
@@ -91,12 +91,20 @@ let avlVisualizer = {
             keyDom.classList.add('inserted')
         })
     },
-    performRotation: rotation =>  {
+    performRotation: async rotation =>  {
+        let overlay = document.getElementById('overlay')
+        overlay.querySelector('#overlay_header').innerText = rotation.title + " Rotation"
+        overlay.querySelector('#overlay_body').innerText = "Balance Factor of " + rotation.node.data + " Rotation is " + rotation.node.bf
+
+        await sleep(200)
         rotation.movement.map(async movement => {
             await avlVisualizer.animateMovement(movement)
         })
+        await sleep(500)
+        overlay.querySelector('#overlay_header').innerText = ''
+        overlay.querySelector('#overlay_body').innerText = ''
     },
-    animateMovement: async (points) => {
+    animateMovement: (points) => {
         let nodeInitial = document.getElementById('avl_cell_'+points[0]).querySelector('.node')
         let cellFinal = document.getElementById('avl_cell_'+points[1])
         if (!cellFinal.querySelector('.node')) {
@@ -108,7 +116,6 @@ let avlVisualizer = {
         let leftMovement = nodePositions[1].left-nodePositions[0].left
         nodeInitial.style.transition = "500ms"
         nodeInitial.style.transform = "translate("+(leftMovement)+"px,"+(topMovement)+"px)"
-        await sleep(600)
     },
 }
 
