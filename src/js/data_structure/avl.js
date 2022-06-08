@@ -58,14 +58,21 @@ let avl = {
         return lastPtr
     },
     getBalanceFactor: (avlArr, ptr=0) => {
-        let balanced = true
         let bf = 0
         if(avlArr[leftPtr(ptr)]) bf += (avl.getHeight(avlArr, leftPtr(ptr))+1)
         if(avlArr[rightPtr(ptr)]) bf -= (avl.getHeight(avlArr, rightPtr(ptr))+1)
         avlArr[ptr].bf = bf
-        if(avlArr[leftPtr(ptr)]) balanced = avl.getBalanceFactor(avlArr, leftPtr(ptr))
-        if(avlArr[rightPtr(ptr)]) balanced = avl.getBalanceFactor(avlArr, rightPtr(ptr))
-        return balanced ? bf>=-1 && bf<=1 : balanced
+
+        let balanced = Math.abs(bf)<2
+        if(avlArr[leftPtr(ptr)]) {
+            let leftBalanced = avl.getBalanceFactor(avlArr, leftPtr(ptr))
+            balanced = balanced ? leftBalanced : balanced
+        }
+        if(avlArr[rightPtr(ptr)]) {
+            let rightBalanced = avl.getBalanceFactor(avlArr, rightPtr(ptr))
+            balanced = balanced ? rightBalanced : balanced
+        }
+        return balanced
     },
     getHeight: (avlArr, ptr=0) => {
         if (!avlArr[leftPtr(ptr)] && !avlArr[rightPtr(ptr)]) return 0;
