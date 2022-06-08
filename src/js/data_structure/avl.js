@@ -1,193 +1,184 @@
 let avl = {
-    node: (data, parent=null) => ({
-        parent,
-        left: null,
-        right: null,
+    node: (data) => ({
         data,
         bf: 0
     }),
-    create: (input, animation) => {
-        let node = {}
-        let lastNode = {}
+    leftPtr: ptr => 2*ptr+1,
+    rightPtr: ptr => 2*(ptr+1),
+    parentPtr: ptr => Math.ceil(ptr/2)-1,
+    snapshot: arr => JSON.parse(JSON.stringify(arr)),
+    create: (input) => {
+        let avlArr = []
+        let lastPtr = 0
+        let animation = []
         for (let i=0; i<input.length; i++) {
-            if(i===0) node = avl.node(input[i])
+            if(i===0) {
+                avlArr[i] = avl.node(input[i])
+                animation.push({tree: avl.snapshot(avlArr)})
+            }
             else {
-                lastNode = avl.insertNode(node, input[i])
-                avl.getBalanceFactor(node)
-                console.log({...node}, {...lastNode})
-                node = avl.balanceTree(lastNode)
+                lastPtr = avl.insertNode(input[i], avlArr)
+                let balanced = avl.getBalanceFactor(avlArr)
+                // console.log(avl.snapshot(avlArr), lastPtr, 'before')
+                animation.push({tree: avl.snapshot(avlArr)})
+
+                while (!balanced) {
+                    avl.balanceTree(avlArr, lastPtr)
+                    balanced = avl.getBalanceFactor(avlArr)
+                    animation.push({tree: avl.snapshot(avlArr)})
+                }
+                // console.log(avl.snapshot(avlArr), lastPtr, 'after')
             }
         }
-        return node
+        console.log(animation)
+        return {avlArr, animation}
     },
 
-    insertNode: (node, key) => {
-        let lastNode = {}
-        if (key<node.data) {
-            if (node.left && Object.keys(node.left).length) {
-                lastNode = avl.insertNode(node.left, key)
+    insertNode: (key, avlArr, ptr=0) => {
+        let lastPtr = {}
+        if (key<avlArr[ptr].data) {
+            if (avlArr[avl.leftPtr(ptr)]) {
+                lastPtr = avl.insertNode(key, avlArr, avl.leftPtr(ptr))
             }
             else {
-                node.left = avl.node(key, node)
-                lastNode = {...node.left}
+                avlArr[avl.leftPtr(ptr)] = avl.node(key)
+                lastPtr = avl.leftPtr(ptr)
             }
         }
-        else if (key>node.data) {
-            if (node.right && Object.keys(node.right).length) {
-                lastNode = avl.insertNode(node.right, key)
+        else if (key>avlArr[ptr].data) {
+            if (avlArr[avl.rightPtr(ptr)]) {
+                lastPtr = avl.insertNode(key, avlArr, avl.rightPtr(ptr))
             }
             else {
-                node.right = avl.node(key, node)
-                lastNode = {...node.right}
+                avlArr[avl.rightPtr(ptr)] = avl.node(key)
+                lastPtr = avl.rightPtr(ptr)
             }
         }
-        return lastNode
+        return lastPtr
     },
-    getBalanceFactor: node => {
+    getBalanceFactor: (avlArr, ptr=0) => {
+        let balanced = true
         let bf = 0
-        if(!Object.keys(node).length) {
-            return null
-        }
-        else {
-            if(node.left) bf += (avl.getHeight(node.left)+1)
-            if(node.right) bf -= (avl.getHeight(node.right)+1)
-            node.bf = bf
-            if(node.left) avl.getBalanceFactor(node.left)
-            if(node.right) avl.getBalanceFactor(node.right)
-        }
+        if(avlArr[avl.leftPtr(ptr)]) bf += (avl.getHeight(avlArr, avl.leftPtr(ptr))+1)
+        if(avlArr[avl.rightPtr(ptr)]) bf -= (avl.getHeight(avlArr, avl.rightPtr(ptr))+1)
+        avlArr[ptr].bf = bf
+        if(avlArr[avl.leftPtr(ptr)]) balanced = avl.getBalanceFactor(avlArr, avl.leftPtr(ptr))
+        if(avlArr[avl.rightPtr(ptr)]) balanced = avl.getBalanceFactor(avlArr, avl.rightPtr(ptr))
+        return balanced ? bf>=-1 && bf<=1 : balanced
     },
-    getHeight: node => {
-        if (!node) return 0
-        if (!node.left && !node.right) return 0;
-        else if (!node.right) {
-            if (!node.left.left && !node.left.right) return 1
-            else return avl.getHeight(node.left) +1
-        }
-        else if (!node.left) {
-            if (!node.right.left && !node.right.right) return 1
-            else return avl.getHeight(node.right) +1
-        }
+    getHeight: (avlArr, ptr=0) => {
+        if (!avlArr[avl.leftPtr(ptr)] && !avlArr[avl.rightPtr(ptr)]) return 0;
+        else if (!avlArr[avl.rightPtr(ptr)]) return avl.getHeight(avlArr, avl.leftPtr(ptr)) +1
+        else if (!avlArr[avl.leftPtr(ptr)]) return avl.getHeight(avlArr, avl.rightPtr(ptr)) +1
         else {
-            let leftHeight = avl.getHeight(node.left)
-            let rightHeight = avl.getHeight(node.right)
+            let leftHeight = avl.getHeight(avlArr, avl.leftPtr(ptr))
+            let rightHeight = avl.getHeight(avlArr, avl.rightPtr(ptr))
             return Math.max(leftHeight, rightHeight) + 1
         }
     },
-    balanceTree: (lastNode) => {
-        let node = lastNode
+    balanceTree: (avlArray, ptr) => {
         let isBalanced = false
-        while (node.parent) {
-            node = node.parent
-            console.log('current', node)
+        while (avl.parentPtr(ptr)>=0) {
+            ptr = avl.parentPtr(ptr)
+            console.log('current', avlArray[ptr])
             if (isBalanced) continue
-            if(node.bf > 1) {
-                if(avl.isNode(node.left) && node.left.bf>0){
-                    avl.rotateLL (node)
+            if(avlArray[ptr].bf > 1) {
+                if(avl.isNode(avlArray[avl.leftPtr(ptr)]) && avlArray[avl.leftPtr(ptr)].bf>0){
+                    avl.rotateLL (avlArray, ptr)
                     isBalanced = true
                 }
-                if(avl.isNode(node.left) && node.left.bf<0){
-                    avl.rotateLR (node)
-                    isBalanced = true
-                }
-            }
-            else if(node.bf < -1){
-                if(avl.isNode(node.right) && node.right.bf<0){
-                    avl.rotateRR (node)
-                    isBalanced = true
-                }
-                if(avl.isNode(node.right) && node.right.bf>0){
-                    avl.rotateRL (node)
+                if(avl.isNode(avlArray[avl.leftPtr(ptr)]) && avlArray[avl.leftPtr(ptr)].bf<0){
+                    avl.rotateLR (avlArray, ptr)
                     isBalanced = true
                 }
             }
-        }
-        return node
-    },
-    rotateLL: node => {
-        console.log('ll', {...node})
-        let parent = node.parent
-        let left = node.left
-        let right = node.right
-        let leftOfLeft = node.left.left
-        let rightOfLeft = node.left.right
-
-        let newNode = avl.node(left.data, parent)
-        newNode.right = node
-        newNode.left = leftOfLeft
-        newNode.right.left = rightOfLeft
-        newNode.left.parent = newNode
-        newNode.right.parent = newNode
-
-        if (parent) {
-            if (newNode.data<parent.data) parent.left = newNode
-            else parent.right = newNode
+            else if(avlArray[ptr].bf < -1){
+                if(avl.isNode(avlArray[avl.rightPtr(ptr)]) && avlArray[avl.rightPtr(ptr)].bf<0){
+                    avl.rotateRR (avlArray, ptr)
+                    isBalanced = true
+                }
+                if(avl.isNode(avlArray[avl.rightPtr(ptr)]) && avlArray[avl.rightPtr(ptr)].bf>0){
+                    avl.rotateRL (avlArray, ptr)
+                    isBalanced = true
+                }
+            }
         }
     },
-    rotateRR: node => {
-        console.log('rr', {...node})
-        let parent = node.parent
-        let left = node.left
-        let right = node.right
-        let leftOfRight = node.right.left
-        let rightOfRight = node.right.right
+    rotateLL: (avlArray, ptr) => {
+        let avlSnapshot = avl.snapshot(avlArray)
+        console.log('ll', avlSnapshot[ptr], ptr)
+        let leftPtr = avl.leftPtr(ptr)
+        let rightPtr = avl.rightPtr(ptr)
+        let leftOfLeftPtr = avl.leftPtr(avl.leftPtr(ptr))
+        let rightOfLeftPtr = avl.rightPtr(avl.leftPtr(ptr))
+        let leftOfRightPtr = avl.leftPtr(avl.rightPtr(ptr))
+        let rightOfRightPtr = avl.rightPtr(avl.rightPtr(ptr))
 
-        let newNode = avl.node(right.data, parent)
-        newNode.left = node
-        newNode.right = rightOfRight
-        newNode.left.right = leftOfRight
-        newNode.left.parent = newNode
-        newNode.right.parent = newNode
-
-        if (parent) {
-            if (newNode.data<parent.data) parent.left = newNode
-            else parent.right = newNode
-        }
+        avlArray[rightPtr] = avlSnapshot[ptr]
+        avlArray[ptr] = avlSnapshot[leftPtr]
+        avlArray[leftPtr] = avlSnapshot[leftOfLeftPtr]
+        avlArray[leftOfLeftPtr] = null
+        avlArray[rightOfRightPtr] = avlSnapshot[rightPtr]
+        avlArray[leftOfRightPtr] = avlSnapshot[rightOfLeftPtr]
     },
-    rotateLR: node => {
-        console.log('lr', {...node})
-        let parent = node.parent
-        let left = node.left
-        let right = node.right
-        let leftOfLeft = node.left.left
-        let rightOfLeft = node.left.right
-        let leftOfRightOfLeft = node.left.right.left
-        let rightOfRightOfLeft = node.left.right.right
+    rotateRR: (avlArray, ptr) => {
+        let avlSnapshot = avl.snapshot(avlArray)
+        console.log('rr', avlSnapshot[ptr], ptr)
+        let leftPtr = avl.leftPtr(ptr)
+        let rightPtr = avl.rightPtr(ptr)
+        let leftOfLeftPtr = avl.leftPtr(avl.leftPtr(ptr))
+        let rightOfRightPtr = avl.rightPtr(avl.rightPtr(ptr))
+        let leftOfRightPtr = avl.leftPtr(avl.rightPtr(ptr))
+        let rightOfLeftPtr = avl.rightPtr(avl.leftPtr(ptr))
 
-        let newNode = avl.node(rightOfLeft.data, parent)
-        newNode.right = node
-        newNode.left = left
-        newNode.left.right = leftOfRightOfLeft
-        newNode.right.left = rightOfRightOfLeft
-        newNode.left.parent = newNode
-        newNode.right.parent = newNode
-
-        if (parent) {
-            if (newNode.data<parent.data) parent.left = newNode
-            else parent.right = newNode
-        }
+        avlArray[leftPtr] = avlSnapshot[ptr]
+        avlArray[ptr] = avlSnapshot[rightPtr]
+        avlArray[rightPtr] = avlSnapshot[rightOfRightPtr]
+        avlArray[rightOfRightPtr] = null
+        avlArray[leftOfLeftPtr] = avlSnapshot[leftPtr]
+        avlArray[rightOfLeftPtr] = avlSnapshot[leftOfRightPtr]
     },
-    rotateRL: node => {
-        console.log('rl', {...node})
-        let parent = node.parent
-        let left = node.left
-        let right = node.right
-        let leftOfRight = node.right.left
-        let rightOfRight = node.right.right
-        let rightOfLeftOfRight = node.right.left.right
-        let leftOfLeftOfRight = node.right.left.left
+    rotateLR: (avlArray, ptr) => {
+        let avlSnapshot = avl.snapshot(avlArray)
+        console.log('lr', avlSnapshot[ptr], ptr)
+        let leftPtr = avl.leftPtr(ptr)
+        let rightPtr = avl.rightPtr(ptr)
+        let leftOfLeftPtr = avl.leftPtr(avl.leftPtr(ptr))
+        let rightOfRightPtr = avl.rightPtr(avl.rightPtr(ptr))
+        let leftOfRightPtr = avl.leftPtr(avl.rightPtr(ptr))
+        let rightOfLeftPtr = avl.rightPtr(avl.leftPtr(ptr))
+        let leftOfRightOfLeftPtr = avl.leftPtr(avl.rightPtr(avl.leftPtr(ptr)))
+        let rightOfRightOfLeftPtr =  avl.rightPtr(avl.rightPtr(avl.leftPtr(ptr)))
 
-        let newNode = avl.node(leftOfRight.data, parent)
-        newNode.left = node
-        newNode.right = right
-        newNode.left.right = leftOfLeftOfRight
-        newNode.right.left = rightOfLeftOfRight
-        newNode.left.parent = newNode
-        newNode.right.parent = newNode
+        avlArray[rightPtr] = avlSnapshot[ptr]
+        avlArray[ptr] = avlSnapshot[rightOfLeftPtr]
+        avlArray[leftPtr] = avlSnapshot[leftPtr]
+        avlArray[rightOfRightPtr] = avlSnapshot[rightPtr]
+        avlArray[rightOfLeftPtr] = avlSnapshot[leftOfRightOfLeftPtr]
+        avlArray[leftOfRightPtr] = avlSnapshot[rightOfRightOfLeftPtr]
+        avlArray[leftOfRightOfLeftPtr] = null
+        avlArray[rightOfRightOfLeftPtr] = null
+    },
+    rotateRL: (avlArray, ptr) => {
+        let avlSnapshot = avl.snapshot(avlArray)
+        console.log('rl', avlSnapshot[ptr], ptr)
+        let leftPtr = avl.leftPtr(ptr)
+        let rightPtr = avl.rightPtr(ptr)
+        let leftOfLeftPtr = avl.leftPtr(avl.leftPtr(ptr))
+        let rightOfRightPtr = avl.rightPtr(avl.rightPtr(ptr))
+        let leftOfRightPtr = avl.leftPtr(avl.rightPtr(ptr))
+        let rightOfLeftPtr = avl.rightPtr(avl.leftPtr(ptr))
+        let leftOfLeftOfRightPtr = avl.leftPtr(avl.leftPtr(avl.rightPtr(ptr)))
+        let rightOfLeftOfRightPtr =  avl.rightPtr(avl.leftPtr(avl.rightPtr(ptr)))
 
-        if (parent) {
-            if (newNode.data<parent.data) parent.left = newNode
-            else parent.right = newNode
-        }
+        avlArray[leftPtr] = avlSnapshot[ptr]
+        avlArray[ptr] = avlSnapshot[leftOfRightPtr]
+        avlArray[rightPtr] = avlSnapshot[rightPtr]
+        avlArray[leftOfLeftPtr] = avlSnapshot[leftPtr]
+        avlArray[rightOfLeftPtr] = avlSnapshot[leftOfLeftOfRightPtr]
+        avlArray[leftOfRightPtr] = avlSnapshot[rightOfLeftOfRightPtr]
+        avlArray[leftOfLeftOfRightPtr] = null
+        avlArray[rightOfLeftOfRightPtr] = null
     },
     isNode: node => node && Object.keys(node).length > 0
 }
