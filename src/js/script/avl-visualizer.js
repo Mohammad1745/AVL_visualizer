@@ -20,7 +20,7 @@ let avlVisualizer = {
                 messageArea.innerHTML = `<p class="message">AVL Visualizer | Current Node: ${config.keys[set.index]}</p>`
                 avlVisualizer.highLightPlottedKeys(keysPlotted)
             } else {
-                messageArea.innerHTML = `<p class="message">AVL Visualizer | Rotation: ${set.rotation.type}</p>`
+                messageArea.innerHTML = `<p class="message">AVL Visualizer | Rotation: ${set.rotation.title}</p>`
                 await avlVisualizer.performRotation(set.rotation)
             }
             await sleep(config.sleepBase)
