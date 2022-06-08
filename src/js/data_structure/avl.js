@@ -1,57 +1,58 @@
+import {leftPtr, rightPtr, parentPtr, snapshot} from "../script/helper";
+
 let avl = {
     node: (data) => ({
         data,
         bf: 0
     }),
-    leftPtr: ptr => 2*ptr+1,
-    rightPtr: ptr => 2*(ptr+1),
-    parentPtr: ptr => Math.ceil(ptr/2)-1,
-    snapshot: arr => JSON.parse(JSON.stringify(arr)),
     create: (input) => {
         let avlArr = []
         let lastPtr = 0
         let animation = []
+        let maxHeight = 0
         for (let i=0; i<input.length; i++) {
             if(i===0) {
                 avlArr[i] = avl.node(input[i])
-                animation.push({tree: avl.snapshot(avlArr)})
+                animation.push({tree: snapshot(avlArr), index: i})
             }
             else {
                 lastPtr = avl.insertNode(input[i], avlArr)
                 let balanced = avl.getBalanceFactor(avlArr)
-                // console.log(avl.snapshot(avlArr), lastPtr, 'before')
-                animation.push({tree: avl.snapshot(avlArr)})
+                // console.log(snapshot(avlArr), lastPtr, 'before')
+                animation.push({tree: snapshot(avlArr), index: i})
 
                 while (!balanced) {
                     avl.balanceTree(avlArr, lastPtr)
                     balanced = avl.getBalanceFactor(avlArr)
-                    animation.push({tree: avl.snapshot(avlArr)})
+                    animation.push({tree: snapshot(avlArr)})
                 }
-                // console.log(avl.snapshot(avlArr), lastPtr, 'after')
+                console.log(snapshot(avlArr), lastPtr, 'after')
             }
+            maxHeight = Math.max(maxHeight, avl.getHeight(snapshot(avlArr)))
         }
-        console.log(animation)
-        return {avlArr, animation}
+        let height = avl.getHeight(avlArr)
+        console.log(maxHeight)
+        return {avlArr, animation, height, maxHeight}
     },
 
     insertNode: (key, avlArr, ptr=0) => {
         let lastPtr = {}
         if (key<avlArr[ptr].data) {
-            if (avlArr[avl.leftPtr(ptr)]) {
-                lastPtr = avl.insertNode(key, avlArr, avl.leftPtr(ptr))
+            if (avlArr[leftPtr(ptr)]) {
+                lastPtr = avl.insertNode(key, avlArr, leftPtr(ptr))
             }
             else {
-                avlArr[avl.leftPtr(ptr)] = avl.node(key)
-                lastPtr = avl.leftPtr(ptr)
+                avlArr[leftPtr(ptr)] = avl.node(key)
+                lastPtr = leftPtr(ptr)
             }
         }
         else if (key>avlArr[ptr].data) {
-            if (avlArr[avl.rightPtr(ptr)]) {
-                lastPtr = avl.insertNode(key, avlArr, avl.rightPtr(ptr))
+            if (avlArr[rightPtr(ptr)]) {
+                lastPtr = avl.insertNode(key, avlArr, rightPtr(ptr))
             }
             else {
-                avlArr[avl.rightPtr(ptr)] = avl.node(key)
-                lastPtr = avl.rightPtr(ptr)
+                avlArr[rightPtr(ptr)] = avl.node(key)
+                lastPtr = rightPtr(ptr)
             }
         }
         return lastPtr
@@ -59,45 +60,45 @@ let avl = {
     getBalanceFactor: (avlArr, ptr=0) => {
         let balanced = true
         let bf = 0
-        if(avlArr[avl.leftPtr(ptr)]) bf += (avl.getHeight(avlArr, avl.leftPtr(ptr))+1)
-        if(avlArr[avl.rightPtr(ptr)]) bf -= (avl.getHeight(avlArr, avl.rightPtr(ptr))+1)
+        if(avlArr[leftPtr(ptr)]) bf += (avl.getHeight(avlArr, leftPtr(ptr))+1)
+        if(avlArr[rightPtr(ptr)]) bf -= (avl.getHeight(avlArr, rightPtr(ptr))+1)
         avlArr[ptr].bf = bf
-        if(avlArr[avl.leftPtr(ptr)]) balanced = avl.getBalanceFactor(avlArr, avl.leftPtr(ptr))
-        if(avlArr[avl.rightPtr(ptr)]) balanced = avl.getBalanceFactor(avlArr, avl.rightPtr(ptr))
+        if(avlArr[leftPtr(ptr)]) balanced = avl.getBalanceFactor(avlArr, leftPtr(ptr))
+        if(avlArr[rightPtr(ptr)]) balanced = avl.getBalanceFactor(avlArr, rightPtr(ptr))
         return balanced ? bf>=-1 && bf<=1 : balanced
     },
     getHeight: (avlArr, ptr=0) => {
-        if (!avlArr[avl.leftPtr(ptr)] && !avlArr[avl.rightPtr(ptr)]) return 0;
-        else if (!avlArr[avl.rightPtr(ptr)]) return avl.getHeight(avlArr, avl.leftPtr(ptr)) +1
-        else if (!avlArr[avl.leftPtr(ptr)]) return avl.getHeight(avlArr, avl.rightPtr(ptr)) +1
+        if (!avlArr[leftPtr(ptr)] && !avlArr[rightPtr(ptr)]) return 0;
+        else if (!avlArr[rightPtr(ptr)]) return avl.getHeight(avlArr, leftPtr(ptr)) +1
+        else if (!avlArr[leftPtr(ptr)]) return avl.getHeight(avlArr, rightPtr(ptr)) +1
         else {
-            let leftHeight = avl.getHeight(avlArr, avl.leftPtr(ptr))
-            let rightHeight = avl.getHeight(avlArr, avl.rightPtr(ptr))
+            let leftHeight = avl.getHeight(avlArr, leftPtr(ptr))
+            let rightHeight = avl.getHeight(avlArr, rightPtr(ptr))
             return Math.max(leftHeight, rightHeight) + 1
         }
     },
     balanceTree: (avlArray, ptr) => {
         let isBalanced = false
-        while (avl.parentPtr(ptr)>=0) {
-            ptr = avl.parentPtr(ptr)
+        while (parentPtr(ptr)>=0) {
+            ptr = parentPtr(ptr)
             console.log('current', avlArray[ptr])
             if (isBalanced) continue
             if(avlArray[ptr].bf > 1) {
-                if(avl.isNode(avlArray[avl.leftPtr(ptr)]) && avlArray[avl.leftPtr(ptr)].bf>0){
+                if(avl.isNode(avlArray[leftPtr(ptr)]) && avlArray[leftPtr(ptr)].bf>0){
                     avl.rotateLL (avlArray, ptr)
                     isBalanced = true
                 }
-                if(avl.isNode(avlArray[avl.leftPtr(ptr)]) && avlArray[avl.leftPtr(ptr)].bf<0){
+                if(avl.isNode(avlArray[leftPtr(ptr)]) && avlArray[leftPtr(ptr)].bf<0){
                     avl.rotateLR (avlArray, ptr)
                     isBalanced = true
                 }
             }
             else if(avlArray[ptr].bf < -1){
-                if(avl.isNode(avlArray[avl.rightPtr(ptr)]) && avlArray[avl.rightPtr(ptr)].bf<0){
+                if(avl.isNode(avlArray[rightPtr(ptr)]) && avlArray[rightPtr(ptr)].bf<0){
                     avl.rotateRR (avlArray, ptr)
                     isBalanced = true
                 }
-                if(avl.isNode(avlArray[avl.rightPtr(ptr)]) && avlArray[avl.rightPtr(ptr)].bf>0){
+                if(avl.isNode(avlArray[rightPtr(ptr)]) && avlArray[rightPtr(ptr)].bf>0){
                     avl.rotateRL (avlArray, ptr)
                     isBalanced = true
                 }
@@ -105,76 +106,76 @@ let avl = {
         }
     },
     rotateLL: (avlArray, ptr) => {
-        let avlSnapshot = avl.snapshot(avlArray)
+        let avlSnapshot = snapshot(avlArray)
         console.log('ll', avlSnapshot[ptr], ptr)
-        let leftPtr = avl.leftPtr(ptr)
-        let rightPtr = avl.rightPtr(ptr)
-        let leftOfLeftPtr = avl.leftPtr(avl.leftPtr(ptr))
-        let rightOfLeftPtr = avl.rightPtr(avl.leftPtr(ptr))
-        let leftOfRightPtr = avl.leftPtr(avl.rightPtr(ptr))
-        let rightOfRightPtr = avl.rightPtr(avl.rightPtr(ptr))
+        let lPtr = leftPtr(ptr)
+        let rPtr = rightPtr(ptr)
+        let leftOfLeftPtr = leftPtr(leftPtr(ptr))
+        let rightOfLeftPtr = rightPtr(leftPtr(ptr))
+        let leftOfRightPtr = leftPtr(rightPtr(ptr))
+        let rightOfRightPtr = rightPtr(rightPtr(ptr))
 
-        avlArray[rightPtr] = avlSnapshot[ptr]
-        avlArray[ptr] = avlSnapshot[leftPtr]
-        avlArray[leftPtr] = avlSnapshot[leftOfLeftPtr]
+        avlArray[rPtr] = avlSnapshot[ptr]
+        avlArray[ptr] = avlSnapshot[lPtr]
+        avlArray[lPtr] = avlSnapshot[leftOfLeftPtr]
         avlArray[leftOfLeftPtr] = null
-        avlArray[rightOfRightPtr] = avlSnapshot[rightPtr]
+        avlArray[rightOfRightPtr] = avlSnapshot[rPtr]
         avlArray[leftOfRightPtr] = avlSnapshot[rightOfLeftPtr]
     },
     rotateRR: (avlArray, ptr) => {
-        let avlSnapshot = avl.snapshot(avlArray)
+        let avlSnapshot = snapshot(avlArray)
         console.log('rr', avlSnapshot[ptr], ptr)
-        let leftPtr = avl.leftPtr(ptr)
-        let rightPtr = avl.rightPtr(ptr)
-        let leftOfLeftPtr = avl.leftPtr(avl.leftPtr(ptr))
-        let rightOfRightPtr = avl.rightPtr(avl.rightPtr(ptr))
-        let leftOfRightPtr = avl.leftPtr(avl.rightPtr(ptr))
-        let rightOfLeftPtr = avl.rightPtr(avl.leftPtr(ptr))
+        let lPtr = leftPtr(ptr)
+        let rPtr = rightPtr(ptr)
+        let leftOfLeftPtr = leftPtr(leftPtr(ptr))
+        let rightOfRightPtr = rightPtr(rightPtr(ptr))
+        let leftOfRightPtr = leftPtr(rightPtr(ptr))
+        let rightOfLeftPtr = rightPtr(leftPtr(ptr))
 
-        avlArray[leftPtr] = avlSnapshot[ptr]
-        avlArray[ptr] = avlSnapshot[rightPtr]
-        avlArray[rightPtr] = avlSnapshot[rightOfRightPtr]
+        avlArray[lPtr] = avlSnapshot[ptr]
+        avlArray[ptr] = avlSnapshot[rPtr]
+        avlArray[rPtr] = avlSnapshot[rightOfRightPtr]
         avlArray[rightOfRightPtr] = null
-        avlArray[leftOfLeftPtr] = avlSnapshot[leftPtr]
+        avlArray[leftOfLeftPtr] = avlSnapshot[lPtr]
         avlArray[rightOfLeftPtr] = avlSnapshot[leftOfRightPtr]
     },
     rotateLR: (avlArray, ptr) => {
-        let avlSnapshot = avl.snapshot(avlArray)
+        let avlSnapshot = snapshot(avlArray)
         console.log('lr', avlSnapshot[ptr], ptr)
-        let leftPtr = avl.leftPtr(ptr)
-        let rightPtr = avl.rightPtr(ptr)
-        let leftOfLeftPtr = avl.leftPtr(avl.leftPtr(ptr))
-        let rightOfRightPtr = avl.rightPtr(avl.rightPtr(ptr))
-        let leftOfRightPtr = avl.leftPtr(avl.rightPtr(ptr))
-        let rightOfLeftPtr = avl.rightPtr(avl.leftPtr(ptr))
-        let leftOfRightOfLeftPtr = avl.leftPtr(avl.rightPtr(avl.leftPtr(ptr)))
-        let rightOfRightOfLeftPtr =  avl.rightPtr(avl.rightPtr(avl.leftPtr(ptr)))
+        let lPtr = leftPtr(ptr)
+        let rPtr = rightPtr(ptr)
+        let leftOfLeftPtr = leftPtr(leftPtr(ptr))
+        let rightOfRightPtr = rightPtr(rightPtr(ptr))
+        let leftOfRightPtr = leftPtr(rightPtr(ptr))
+        let rightOfLeftPtr = rightPtr(leftPtr(ptr))
+        let leftOfRightOfLeftPtr = leftPtr(rightPtr(leftPtr(ptr)))
+        let rightOfRightOfLeftPtr =  rightPtr(rightPtr(leftPtr(ptr)))
 
-        avlArray[rightPtr] = avlSnapshot[ptr]
+        avlArray[rPtr] = avlSnapshot[ptr]
         avlArray[ptr] = avlSnapshot[rightOfLeftPtr]
-        avlArray[leftPtr] = avlSnapshot[leftPtr]
-        avlArray[rightOfRightPtr] = avlSnapshot[rightPtr]
+        avlArray[lPtr] = avlSnapshot[lPtr]
+        avlArray[rightOfRightPtr] = avlSnapshot[rPtr]
         avlArray[rightOfLeftPtr] = avlSnapshot[leftOfRightOfLeftPtr]
         avlArray[leftOfRightPtr] = avlSnapshot[rightOfRightOfLeftPtr]
         avlArray[leftOfRightOfLeftPtr] = null
         avlArray[rightOfRightOfLeftPtr] = null
     },
     rotateRL: (avlArray, ptr) => {
-        let avlSnapshot = avl.snapshot(avlArray)
+        let avlSnapshot = snapshot(avlArray)
         console.log('rl', avlSnapshot[ptr], ptr)
-        let leftPtr = avl.leftPtr(ptr)
-        let rightPtr = avl.rightPtr(ptr)
-        let leftOfLeftPtr = avl.leftPtr(avl.leftPtr(ptr))
-        let rightOfRightPtr = avl.rightPtr(avl.rightPtr(ptr))
-        let leftOfRightPtr = avl.leftPtr(avl.rightPtr(ptr))
-        let rightOfLeftPtr = avl.rightPtr(avl.leftPtr(ptr))
-        let leftOfLeftOfRightPtr = avl.leftPtr(avl.leftPtr(avl.rightPtr(ptr)))
-        let rightOfLeftOfRightPtr =  avl.rightPtr(avl.leftPtr(avl.rightPtr(ptr)))
+        let lPtr = leftPtr(ptr)
+        let rPtr = rightPtr(ptr)
+        let leftOfLeftPtr = leftPtr(leftPtr(ptr))
+        let rightOfRightPtr = rightPtr(rightPtr(ptr))
+        let leftOfRightPtr = leftPtr(rightPtr(ptr))
+        let rightOfLeftPtr = rightPtr(leftPtr(ptr))
+        let leftOfLeftOfRightPtr = leftPtr(leftPtr(rightPtr(ptr)))
+        let rightOfLeftOfRightPtr =  rightPtr(leftPtr(rightPtr(ptr)))
 
-        avlArray[leftPtr] = avlSnapshot[ptr]
+        avlArray[lPtr] = avlSnapshot[ptr]
         avlArray[ptr] = avlSnapshot[leftOfRightPtr]
-        avlArray[rightPtr] = avlSnapshot[rightPtr]
-        avlArray[leftOfLeftPtr] = avlSnapshot[leftPtr]
+        avlArray[rPtr] = avlSnapshot[rPtr]
+        avlArray[leftOfLeftPtr] = avlSnapshot[lPtr]
         avlArray[rightOfLeftPtr] = avlSnapshot[leftOfLeftOfRightPtr]
         avlArray[leftOfRightPtr] = avlSnapshot[rightOfLeftOfRightPtr]
         avlArray[leftOfLeftOfRightPtr] = null

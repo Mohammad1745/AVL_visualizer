@@ -10,6 +10,18 @@ export function generateArray(length = 5, unique = false) {
     return [...array]
 }
 
+export function leftPtr (ptr) {
+    return 2*ptr+1
+}
+export function rightPtr (ptr) {
+    return 2*(ptr+1)
+}
+export function parentPtr (ptr) {
+    return Math.ceil(ptr/2)-1
+}
+export function snapshot (arr) {
+    return JSON.parse(JSON.stringify(arr))
+}
 export function switchElement (array, index1, index2) {
     let temp = array[index1]
     array[index1] = array[index2]
