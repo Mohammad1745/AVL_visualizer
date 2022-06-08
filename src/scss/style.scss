@@ -7,7 +7,7 @@ body {
   font-family: 'Kdam Thmor Pro', sans-serif;
 }
 #app {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   background: $backgroundColor;
@@ -21,6 +21,11 @@ body {
   &__brand {
     font-size: 1.25rem;
     font-weight: bold;
+  }
+  &__range-slider{
+    &__title {
+      text-align: center;
+    }
   }
 
   &__buttons {
@@ -76,6 +81,7 @@ body {
 .visualizer {
   padding: 0.5vw 10vw;
   flex-grow: 1;
+  overflow-y: scroll;
 
   &__bst {
 
@@ -108,8 +114,11 @@ body {
         align-items: center;
 
         &__bf {
-          position: absolute;
-          font-size: 0.75rem;
+          position: relative;
+
+          height: 0;
+          width: 0;
+          font-size: 1rem;
           color: white;
           transform: translateY(1.5rem);
         }

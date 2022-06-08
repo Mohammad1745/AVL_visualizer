@@ -6,6 +6,7 @@ let config = {
         {key: 'avl', title: "AVL"},
     ],
     selectedTrees: ['bst', 'avl'],
+    sleepBase: 500,//ms
     sliderMin: 3,
     sliderMax: 15,
     sliderValue: 5,

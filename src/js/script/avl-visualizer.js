@@ -17,10 +17,10 @@ let avlVisualizer = {
             if(set.index||set.index===0) keysPlotted.push(config.keys[set.index])
             messageArea.innerHTML = `<p class="message">AVL Visualizer | Current Node: ${config.keys[set.index]}</p>`
             avlVisualizer.highLightPlottedKeys(keysPlotted)
-            await sleep(500)
+            await sleep(config.sleepBase)
             avlVisualizer.clearCells()
             avlVisualizer.plotTrees(set.tree)
-            await sleep(500)
+            await sleep(config.sleepBase)
             messageArea.innerHTML = `<p class="message">AVL Visualizer | Plotting Done | Tree Height: ${treeHeight}</p>`
         }
     },

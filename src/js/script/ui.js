@@ -29,7 +29,7 @@ function loadHeaderContents() {
 function loadRangeSlider() {
     let rangeSlider = document.getElementById('header_range_slider')
     rangeSlider.innerHTML = `
-        <div id="slider_title" class="header__range-slider__title">Size & Speed</div>
+        <div id="slider_title" class="header__range-slider__title">Size</div>
         <input type="range" min="${config.sliderMin}" max="${config.sliderMax}" value="${config.sliderValue}"  id="slider_input" class="header__range-slider__input">
     `
 }

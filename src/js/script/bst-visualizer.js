@@ -16,9 +16,9 @@ let bstVisualizer = {
             keysPlotted.push(config.keys[set.index])
             messageArea.innerHTML = `<p class="message">BST Visualizer | Current Node: ${config.keys[set.index]}</p>`
             bstVisualizer.highLightPlottedKeys(keysPlotted)
-            await sleep(500)
+            await sleep(config.sleepBase)
             bstVisualizer.plotTrees(rootNode, keysPlotted)
-            await sleep(500)
+            await sleep(config.sleepBase)
             messageArea.innerHTML = `<p class="message">BST Visualizer | Plotting Done | Tree Height: ${treeHeight}</p>`
         }
     },
