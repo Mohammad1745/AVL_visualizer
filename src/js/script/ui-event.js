@@ -86,7 +86,8 @@ function handleResetButton() {
     let resetButton = document.getElementById('reset_btn')
     resetButton.addEventListener('click', () => {
         if (config.mode===config.modes.initial||config.mode===config.modes.done){
-            alert('Reset')
+            config.keys = generateArray(config.sliderValue, true)
+            updateKeyList()
         }
     })
 }
