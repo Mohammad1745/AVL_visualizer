@@ -5,7 +5,7 @@ let config = {
         {key: 'bst', title: "BST"},
         {key: 'avl', title: "AVL"},
     ],
-    selectedTrees: ['bst'],
+    selectedTrees: ['avl'],
     sliderMin: 3,
     sliderMax: 15,
     sliderValue: 5,
@@ -16,7 +16,7 @@ let config = {
     bstHeight: 0,
     avlHeight: 0,
     bstRoot: {},
-    avlRoot: {},
+    avlArray: [],
     modes: {initial: 1, running: 2, done:3},
 }
 config.mode = config.modes.initial

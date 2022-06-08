@@ -74,10 +74,10 @@ function handleVisualizeButton() {
             }
             if (config.selectedTrees.includes('avl')){
                 let avlOutput = avl.create(config.keys)
-                config.avlRoot = avlOutput.node
+                config.avlArray = avlOutput.node
                 config.avlAnimation = avlOutput.animation
                 config.avlHeight = avlOutput.height
-                await avlVisualizer.run(config.avlRoot, config.avlHeight, config.keys, config.avlAnimation)
+                await avlVisualizer.run(config.avlArray, config.avlHeight, avlOutput.maxHeight, config.avlAnimation)
             }
         }
     })
