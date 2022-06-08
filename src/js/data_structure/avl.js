@@ -21,9 +21,9 @@ let avl = {
                 animation.push({tree: snapshot(avlArr), index: i})
 
                 while (!balanced) {
-                    avl.balanceTree(avlArr, lastPtr)
+                    let rotation = avl.balanceTree(avlArr, lastPtr)
                     balanced = avl.getBalanceFactor(avlArr)
-                    animation.push({tree: snapshot(avlArr)})
+                    animation.push({tree: snapshot(avlArr), rotation})
                 }
             }
             maxHeight = Math.max(maxHeight, avl.getHeight(snapshot(avlArr)))
@@ -84,30 +84,32 @@ let avl = {
     },
     balanceTree: (avlArray, ptr) => {
         let isBalanced = false
+        let rotation = null
         while (parentPtr(ptr)>=0) {
             ptr = parentPtr(ptr)
             if (isBalanced) continue
             if(avlArray[ptr].bf > 1) {
                 if(isNode(avlArray[leftPtr(ptr)]) && avlArray[leftPtr(ptr)].bf>0){
-                    avl.rotateLL (avlArray, ptr)
+                    rotation = avl.rotateLL (avlArray, ptr)
                     isBalanced = true
                 }
                 if(isNode(avlArray[leftPtr(ptr)]) && avlArray[leftPtr(ptr)].bf<0){
-                    avl.rotateLR (avlArray, ptr)
+                    rotation = avl.rotateLR (avlArray, ptr)
                     isBalanced = true
                 }
             }
             else if(avlArray[ptr].bf < -1){
                 if(isNode(avlArray[rightPtr(ptr)]) && avlArray[rightPtr(ptr)].bf<0){
-                    avl.rotateRR (avlArray, ptr)
+                    rotation = avl.rotateRR (avlArray, ptr)
                     isBalanced = true
                 }
                 if(isNode(avlArray[rightPtr(ptr)]) && avlArray[rightPtr(ptr)].bf>0){
-                    avl.rotateRL (avlArray, ptr)
+                    rotation = avl.rotateRL (avlArray, ptr)
                     isBalanced = true
                 }
             }
         }
+        return rotation
     },
     rotateLL: (avlArray, ptr) => {
         let avlSnapshot = snapshot(avlArray)
@@ -124,6 +126,17 @@ let avl = {
         avlArray[leftOfLeftPtr] = null
         avlArray[rightOfRightPtr] = avlSnapshot[rPtr]
         avlArray[leftOfRightPtr] = avlSnapshot[rightOfLeftPtr]
+
+        return {
+            type: 'll',
+            movement: [
+                [ptr, rPtr],
+                [lPtr, ptr],
+                [leftOfLeftPtr, lPtr],
+                [rPtr, rightOfRightPtr],
+                [rightOfLeftPtr, leftOfRightPtr]
+            ]
+        }
     },
     rotateRR: (avlArray, ptr) => {
         let avlSnapshot = snapshot(avlArray)
@@ -140,6 +153,17 @@ let avl = {
         avlArray[rightOfRightPtr] = null
         avlArray[leftOfLeftPtr] = avlSnapshot[lPtr]
         avlArray[rightOfLeftPtr] = avlSnapshot[leftOfRightPtr]
+
+        return {
+            type: 'rr',
+            movement: [
+                [ptr, lPtr],
+                [rPtr, ptr],
+                [rightOfRightPtr, rPtr],
+                [lPtr, leftOfLeftPtr],
+                [leftOfRightPtr, rightOfLeftPtr]
+            ]
+        }
     },
     rotateLR: (avlArray, ptr) => {
         let avlSnapshot = snapshot(avlArray)
@@ -160,6 +184,18 @@ let avl = {
         avlArray[leftOfRightPtr] = avlSnapshot[rightOfRightOfLeftPtr]
         avlArray[leftOfRightOfLeftPtr] = null
         avlArray[rightOfRightOfLeftPtr] = null
+
+        return {
+            type: 'lr',
+            movement: [
+                [ptr, rPtr],
+                [rightOfLeftPtr, ptr],
+                [lPtr, lPtr],
+                [rPtr, rightOfRightPtr],
+                [leftOfRightOfLeftPtr, rightOfLeftPtr],
+                [rightOfRightOfLeftPtr, leftOfRightPtr]
+            ]
+        }
     },
     rotateRL: (avlArray, ptr) => {
         let avlSnapshot = snapshot(avlArray)
@@ -180,6 +216,18 @@ let avl = {
         avlArray[leftOfRightPtr] = avlSnapshot[rightOfLeftOfRightPtr]
         avlArray[leftOfLeftOfRightPtr] = null
         avlArray[rightOfLeftOfRightPtr] = null
+
+        return {
+            type: 'rl',
+            movement: [
+                [ptr, lPtr],
+                [leftOfRightPtr, ptr],
+                [rPtr, rPtr],
+                [lPtr, leftOfLeftPtr],
+                [leftOfLeftOfRightPtr, rightOfLeftPtr],
+                [rightOfLeftOfRightPtr, leftOfRightPtr]
+            ]
+        }
     }
 }
 

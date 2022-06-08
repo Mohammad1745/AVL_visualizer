@@ -1,6 +1,7 @@
 import config from "./config";
 import {sleep, getOffset, distanceBetweenPoints, slopAngleOfPoints} from "./helper"
 import {leftPtr, rightPtr, parentPtr, isNode} from "./helper"
+import avl from "../data_structure/avl";
 
 let avlVisualizer = {
     run:  async (rootNode, treeHeight, maxHeight, animation) =>{
@@ -14,15 +15,20 @@ let avlVisualizer = {
         avlVisualizer.plotNodeLocations(plotArea, maxHeight)
         let keysPlotted = []
         for (let set of animation) {
-            if(set.index||set.index===0) keysPlotted.push(config.keys[set.index])
-            messageArea.innerHTML = `<p class="message">AVL Visualizer | Current Node: ${config.keys[set.index]}</p>`
-            avlVisualizer.highLightPlottedKeys(keysPlotted)
+            if(set.index||set.index===0) {
+                keysPlotted.push(config.keys[set.index])
+                messageArea.innerHTML = `<p class="message">AVL Visualizer | Current Node: ${config.keys[set.index]}</p>`
+                avlVisualizer.highLightPlottedKeys(keysPlotted)
+            } else {
+                messageArea.innerHTML = `<p class="message">AVL Visualizer | Rotation: ${set.rotation.type}</p>`
+                avlVisualizer.performRotation(set.rotation)
+            }
             await sleep(config.sleepBase)
             avlVisualizer.clearCells()
             avlVisualizer.plotTrees(set.tree)
             await sleep(config.sleepBase)
-            messageArea.innerHTML = `<p class="message">AVL Visualizer | Plotting Done | Tree Height: ${treeHeight}</p>`
         }
+        messageArea.innerHTML = `<p class="message">AVL Visualizer | Plotting Done | Tree Height: ${treeHeight}</p>`
     },
     plotNodeLocations: (visDom, maxHeight) => {
         let levels = ``
@@ -84,7 +90,27 @@ let avlVisualizer = {
             let keyDom = document.getElementById('key_'+index)
             keyDom.classList.add('inserted')
         })
-    }
+    },
+    performRotation: rotation =>  {
+        rotation.movement.map(async movement => {
+            console.log(movement, 'movement')
+            await avlVisualizer.animateSwitch(movement)
+        })
+    },
+    animateSwitch: async (points) => {
+        let switchingNodes = [
+            document.getElementById('avl_cell_'+points[0]).querySelector('.node'),
+            document.getElementById('avl_cell_'+points[1]).querySelector('.node')
+        ]
+        let nodePositions = [getOffset(switchingNodes[0]), getOffset(switchingNodes[1])]
+        let topMovement = nodePositions[1].top-nodePositions[0].top
+        let leftMovement = nodePositions[1].left-nodePositions[0].left
+        switchingNodes[0].style.transition = "400ms"
+        switchingNodes[0].style.transform = "translate("+(leftMovement)+"px,"+(topMovement)+"px)"
+        // switchingNodes[1].style.transition = "400ms"
+        // switchingNodes[1].style.transform = "translate("+(-leftMovement)+"px,"+(-topMovement)+"px)"
+        await sleep(500)
+    },
 }
 
 export default avlVisualizer
