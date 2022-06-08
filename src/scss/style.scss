@@ -103,7 +103,6 @@ body {
       //border: 1px solid black;
       display: flex;
       justify-content: center;
-
       .node {
         height: 2rem;
         width: 2rem;
@@ -125,6 +124,9 @@ body {
         .red {
           color: orangered;
         }
+      }
+      .empty {
+        background: transparent;
       }
       .node-link {
         margin: 0;

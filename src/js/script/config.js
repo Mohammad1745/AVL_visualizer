@@ -9,7 +9,7 @@ let config = {
     sleepBase: 500,//ms
     sliderMin: 3,
     sliderMax: 15,
-    sliderValue: 5,
+    sliderValue: 7,
     keys: [],
     keysPlotted: [],
     bstAnimation: [],

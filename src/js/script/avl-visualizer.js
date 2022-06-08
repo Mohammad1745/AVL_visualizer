@@ -60,16 +60,16 @@ let avlVisualizer = {
         let cell = document.getElementById('avl_cell_'+ptr)
         let balanceFactor = `<span class="node__bf `+ (Math.abs(tree[ptr].bf) > 1 ? 'red' : '') +`">${tree[ptr].bf}</span>`
 
-        if (ptr===0) cell.innerHTML =`<div id="node" class="node">${tree[ptr].data}`+balanceFactor+`</div>`
+        if (ptr===0) cell.innerHTML =`<div id="node_${ptr}" class="node">${tree[ptr].data}`+balanceFactor+`</div>`
         else if (direction && direction ==='l')
             cell.innerHTML =`
-                    <div id="node" class="node">${tree[ptr].data}`+balanceFactor+`</div>
-                    <div id="node_link" class="node-link"></div>
+                    <div id="node_${ptr}" class="node">${tree[ptr].data}`+balanceFactor+`</div>
+                    <div id="node_link_${ptr}" class="node-link"></div>
                 `
         else
             cell.innerHTML = `
-                    <div id="node_link" class="node-link"></div>
-                    <div id="node" class="node">${tree[ptr].data}`+balanceFactor+`</div>
+                    <div id="node_link_${ptr}" class="node-link"></div>
+                    <div id="node_${ptr}" class="node">${tree[ptr].data}`+balanceFactor+`</div>
                 `
         if (ptr>0) {
             let parentNode = document.getElementById('avl_cell_'+parentPtr(ptr)).querySelector('.node')
@@ -93,23 +93,22 @@ let avlVisualizer = {
     },
     performRotation: rotation =>  {
         rotation.movement.map(async movement => {
-            console.log(movement, 'movement')
-            await avlVisualizer.animateSwitch(movement)
+            await avlVisualizer.animateMovement(movement)
         })
     },
-    animateSwitch: async (points) => {
-        let switchingNodes = [
-            document.getElementById('avl_cell_'+points[0]).querySelector('.node'),
-            document.getElementById('avl_cell_'+points[1]).querySelector('.node')
-        ]
-        let nodePositions = [getOffset(switchingNodes[0]), getOffset(switchingNodes[1])]
+    animateMovement: async (points) => {
+        let nodeInitial = document.getElementById('avl_cell_'+points[0]).querySelector('.node')
+        let cellFinal = document.getElementById('avl_cell_'+points[1])
+        if (!cellFinal.querySelector('.node')) {
+            cellFinal.insertAdjacentHTML('beforeend', `<div id="node_${points[1]}" class="node empty"></div>`)
+        }
+        let nodeFinal = document.getElementById('avl_cell_'+points[1]).querySelector('.node')
+        let nodePositions = [getOffset(nodeInitial), getOffset(nodeFinal)]
         let topMovement = nodePositions[1].top-nodePositions[0].top
         let leftMovement = nodePositions[1].left-nodePositions[0].left
-        switchingNodes[0].style.transition = "400ms"
-        switchingNodes[0].style.transform = "translate("+(leftMovement)+"px,"+(topMovement)+"px)"
-        // switchingNodes[1].style.transition = "400ms"
-        // switchingNodes[1].style.transform = "translate("+(-leftMovement)+"px,"+(-topMovement)+"px)"
-        await sleep(500)
+        nodeInitial.style.transition = "500ms"
+        nodeInitial.style.transform = "translate("+(leftMovement)+"px,"+(topMovement)+"px)"
+        await sleep(600)
     },
 }
 

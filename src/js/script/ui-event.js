@@ -88,6 +88,8 @@ function handleResetButton() {
         if (config.mode===config.modes.initial||config.mode===config.modes.done){
             config.keys = generateArray(config.sliderValue, true)
             updateKeyList()
+            bstVisualizer.clearCells()
+            avlVisualizer.clearCells()
         }
     })
 }
