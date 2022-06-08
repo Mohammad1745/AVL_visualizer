@@ -67,10 +67,10 @@ function handleVisualizeButton() {
         if (config.mode===config.modes.initial||config.mode===config.modes.done){
             if (config.selectedTrees.includes('bst')){
                 let bstOutput = bst.create(config.keys)
-                config.bstRoot = bstOutput.node
+                config.bstArray = bstOutput.node
                 config.bstAnimation = bstOutput.animation
                 config.bstHeight = bstOutput.height
-                await bstVisualizer.run(config.bstRoot, config.bstHeight, config.keys, config.bstAnimation)
+                await bstVisualizer.run(config.bstArray, config.bstHeight, bstOutput.maxHeight, config.bstAnimation)
             }
             if (config.selectedTrees.includes('avl')){
                 let avlOutput = avl.create(config.keys)

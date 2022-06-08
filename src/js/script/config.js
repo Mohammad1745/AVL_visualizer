@@ -16,7 +16,7 @@ let config = {
     avlAnimation: [],
     bstHeight: 0,
     avlHeight: 0,
-    bstRoot: {},
+    bstArray: [],
     avlArray: [],
     modes: {initial: 1, running: 2, done:3},
 }
