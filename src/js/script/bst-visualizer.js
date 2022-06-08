@@ -1,5 +1,5 @@
 import config from "./config";
-import {sleep, getOffset, distanceBetweenPoints, slopAngleOfPoints} from "./helper"
+import {sleep, getOffset, distanceBetweenPoints, slopAngleOfPoints, isNode} from "./helper"
 
 let bstVisualizer = {
     run:  async (rootNode, treeHeight, keys, animation) =>{
@@ -41,8 +41,8 @@ let bstVisualizer = {
             let cell = document.getElementById('cell_'+level+'_'+nodeCellIndex)
             bstVisualizer.loadCell(cell, node, direction, level, parentCellIndex)
 
-            if ( bstVisualizer.isNode(node.left)) bstVisualizer.plotTrees(node.left, keysPlotted, 'l', level+1, nodeCellIndex)
-            if ( bstVisualizer.isNode(node.right)) bstVisualizer.plotTrees(node.right, keysPlotted, 'r', level+1, nodeCellIndex)
+            if ( isNode(node.left)) bstVisualizer.plotTrees(node.left, keysPlotted, 'l', level+1, nodeCellIndex)
+            if ( isNode(node.right)) bstVisualizer.plotTrees(node.right, keysPlotted, 'r', level+1, nodeCellIndex)
         }
     },
     loadCell: (cell, node, direction, level, parentCellIndex) => {
@@ -74,8 +74,7 @@ let bstVisualizer = {
             let keyDom = document.getElementById('key_'+index)
             keyDom.classList.add('inserted')
         })
-    },
-    isNode: node => node && Object.keys(node).length > 0
+    }
 }
 
 export default bstVisualizer

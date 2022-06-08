@@ -1,4 +1,4 @@
-import {leftPtr, rightPtr, parentPtr, snapshot} from "../script/helper";
+import {leftPtr, rightPtr, parentPtr, snapshot, isNode} from "../script/helper";
 
 let avl = {
     node: (data) => ({
@@ -28,6 +28,7 @@ let avl = {
             }
             maxHeight = Math.max(maxHeight, avl.getHeight(snapshot(avlArr)))
         }
+        maxHeight = Math.max(5, maxHeight)
         let height = avl.getHeight(avlArr)
         return {avlArr, animation, height, maxHeight}
     },
@@ -87,21 +88,21 @@ let avl = {
             ptr = parentPtr(ptr)
             if (isBalanced) continue
             if(avlArray[ptr].bf > 1) {
-                if(avl.isNode(avlArray[leftPtr(ptr)]) && avlArray[leftPtr(ptr)].bf>0){
+                if(isNode(avlArray[leftPtr(ptr)]) && avlArray[leftPtr(ptr)].bf>0){
                     avl.rotateLL (avlArray, ptr)
                     isBalanced = true
                 }
-                if(avl.isNode(avlArray[leftPtr(ptr)]) && avlArray[leftPtr(ptr)].bf<0){
+                if(isNode(avlArray[leftPtr(ptr)]) && avlArray[leftPtr(ptr)].bf<0){
                     avl.rotateLR (avlArray, ptr)
                     isBalanced = true
                 }
             }
             else if(avlArray[ptr].bf < -1){
-                if(avl.isNode(avlArray[rightPtr(ptr)]) && avlArray[rightPtr(ptr)].bf<0){
+                if(isNode(avlArray[rightPtr(ptr)]) && avlArray[rightPtr(ptr)].bf<0){
                     avl.rotateRR (avlArray, ptr)
                     isBalanced = true
                 }
-                if(avl.isNode(avlArray[rightPtr(ptr)]) && avlArray[rightPtr(ptr)].bf>0){
+                if(isNode(avlArray[rightPtr(ptr)]) && avlArray[rightPtr(ptr)].bf>0){
                     avl.rotateRL (avlArray, ptr)
                     isBalanced = true
                 }
@@ -179,8 +180,7 @@ let avl = {
         avlArray[leftOfRightPtr] = avlSnapshot[rightOfLeftOfRightPtr]
         avlArray[leftOfLeftOfRightPtr] = null
         avlArray[rightOfLeftOfRightPtr] = null
-    },
-    isNode: node => node && Object.keys(node).length > 0
+    }
 }
 
 export default avl

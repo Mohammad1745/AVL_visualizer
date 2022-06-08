@@ -9,7 +9,9 @@ export function generateArray(length = 5, unique = false) {
     }
     return [...array]
 }
-
+export function isNode (node) {
+    return node && Object.keys(node).length > 0
+}
 export function leftPtr (ptr) {
     return 2*ptr+1
 }

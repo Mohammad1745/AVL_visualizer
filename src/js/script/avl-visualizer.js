@@ -1,6 +1,6 @@
 import config from "./config";
 import {sleep, getOffset, distanceBetweenPoints, slopAngleOfPoints} from "./helper"
-import {leftPtr, rightPtr, parentPtr, snapshot} from "./helper"
+import {leftPtr, rightPtr, parentPtr, isNode} from "./helper"
 
 let avlVisualizer = {
     run:  async (rootNode, treeHeight, maxHeight, animation) =>{
@@ -42,8 +42,8 @@ let avlVisualizer = {
             let nodeCellIndex = direction && direction ==='r' ? parentCellIndex * 2 + 1 : parentCellIndex * 2
             avlVisualizer.loadCell(tree, ptr, direction)
 
-            if ( avlVisualizer.isNode(tree[leftPtr(ptr)])) avlVisualizer.plotTrees(tree, leftPtr(ptr), 'l', level+1, nodeCellIndex)
-            if ( avlVisualizer.isNode(tree[rightPtr(ptr)])) avlVisualizer.plotTrees(tree, rightPtr(ptr), 'r', level+1, nodeCellIndex)
+            if ( isNode(tree[leftPtr(ptr)])) avlVisualizer.plotTrees(tree, leftPtr(ptr), 'l', level+1, nodeCellIndex)
+            if ( isNode(tree[rightPtr(ptr)])) avlVisualizer.plotTrees(tree, rightPtr(ptr), 'r', level+1, nodeCellIndex)
         }
     },
     clearCells: () => {
@@ -77,13 +77,14 @@ let avlVisualizer = {
         }
     },
     highLightPlottedKeys: (keysPlotted) => {
+        let keyDoms = document.querySelectorAll('.subheader__keys__item')
+        Object.values(keyDoms).map(dom => dom.classList.remove('inserted'))
         keysPlotted.map(key => {
             let index = config.keys.indexOf(key)
             let keyDom = document.getElementById('key_'+index)
             keyDom.classList.add('inserted')
         })
-    },
-    isNode: node => node && Object.keys(node).length > 0
+    }
 }
 
 export default avlVisualizer
