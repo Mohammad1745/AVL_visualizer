@@ -5,7 +5,7 @@ let config = {
         {key: 'bst', title: "BST"},
         {key: 'avl', title: "AVL"},
     ],
-    selectedTrees: ['avl'],
+    selectedTrees: ['bst', 'avl'],
     sliderMin: 3,
     sliderMax: 15,
     sliderValue: 5,
