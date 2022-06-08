@@ -26,6 +26,7 @@ let avlVisualizer = {
         }
     },
     plotNodeLocations: (visDom, maxHeight) => {
+        console.log(maxHeight, 'maxHeight')
         let levels = ``
         let cellIndex = 0
         for (let i=0; i<=maxHeight; i++) {
@@ -35,7 +36,7 @@ let avlVisualizer = {
                 cellIndex++
             }
             levels += `</div>`
-            }
+        }
         visDom.innerHTML = levels
     },
     plotTrees: (tree, ptr=0, direction='', level=0, parentCellIndex=0) => {
@@ -53,17 +54,18 @@ let avlVisualizer = {
     },
     loadCell: (tree, ptr, direction) => {
         let cell = document.getElementById('avl_cell_'+ptr)
+        let balanceFactor = `<span class="node__bf `+ (Math.abs(tree[ptr].bf) > 1 ? 'red' : '') +`">${tree[ptr].bf}</span>`
 
-        if (ptr===0) cell.innerHTML =`<div id="node" class="node">${tree[ptr].data}</div>`
+        if (ptr===0) cell.innerHTML =`<div id="node" class="node">${tree[ptr].data}`+balanceFactor+`</div>`
         else if (direction && direction ==='l')
             cell.innerHTML =`
-                    <div id="node" class="node">${tree[ptr].data}</div>
+                    <div id="node" class="node">${tree[ptr].data}`+balanceFactor+`</div>
                     <div id="node_link" class="node-link"></div>
                 `
         else
             cell.innerHTML = `
                     <div id="node_link" class="node-link"></div>
-                    <div id="node" class="node">${tree[ptr].data}</div>
+                    <div id="node" class="node">${tree[ptr].data}`+balanceFactor+`</div>
                 `
         if (ptr>0) {
             console.log(parentPtr(ptr))

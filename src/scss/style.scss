@@ -106,6 +106,16 @@ body {
         display: flex;
         justify-content: center;
         align-items: center;
+
+        &__bf {
+          position: absolute;
+          font-size: 0.75rem;
+          color: white;
+          transform: translateY(1.5rem);
+        }
+        .red {
+          color: orangered;
+        }
       }
       .node-link {
         margin: 0;
