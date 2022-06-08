@@ -66,7 +66,6 @@ let bstVisualizer = {
             nodeLink.style.height = (distance*0.5)+'px'
             nodeLink.style.transform = direction==='l' ? 'rotate('+(angle-90)+'deg)' : 'rotate('+(angle-90)+'deg)'
             nodeLink.style.transformOrigin = direction==='l' ? 'right top' : 'left top'
-            console.log(angle, distance)
         }
     },
     highLightPlottedKeys: (keysPlotted) => {

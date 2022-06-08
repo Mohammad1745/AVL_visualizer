@@ -19,14 +19,12 @@ let avlVisualizer = {
             avlVisualizer.highLightPlottedKeys(keysPlotted)
             await sleep(500)
             avlVisualizer.clearCells()
-            console.log('plotting: ', set.tree)
             avlVisualizer.plotTrees(set.tree)
             await sleep(500)
             messageArea.innerHTML = `<p class="message">AVL Visualizer | Plotting Done | Tree Height: ${treeHeight}</p>`
         }
     },
     plotNodeLocations: (visDom, maxHeight) => {
-        console.log(maxHeight, 'maxHeight')
         let levels = ``
         let cellIndex = 0
         for (let i=0; i<=maxHeight; i++) {
@@ -68,7 +66,6 @@ let avlVisualizer = {
                     <div id="node" class="node">${tree[ptr].data}`+balanceFactor+`</div>
                 `
         if (ptr>0) {
-            console.log(parentPtr(ptr))
             let parentNode = document.getElementById('avl_cell_'+parentPtr(ptr)).querySelector('.node')
             let nodeDom = cell.querySelector('.node')
             let angle = slopAngleOfPoints(getOffset(nodeDom), getOffset(parentNode))
@@ -77,7 +74,6 @@ let avlVisualizer = {
             nodeLink.style.height = (distance*0.5)+'px'
             nodeLink.style.transform = direction==='l' ? 'rotate('+(angle-90)+'deg)' : 'rotate('+(angle-90)+'deg)'
             nodeLink.style.transformOrigin = direction==='l' ? 'right top' : 'left top'
-            console.log(angle, distance)
         }
     },
     highLightPlottedKeys: (keysPlotted) => {

@@ -18,7 +18,6 @@ let avl = {
             else {
                 lastPtr = avl.insertNode(input[i], avlArr)
                 let balanced = avl.getBalanceFactor(avlArr)
-                // console.log(snapshot(avlArr), lastPtr, 'before')
                 animation.push({tree: snapshot(avlArr), index: i})
 
                 while (!balanced) {
@@ -26,12 +25,10 @@ let avl = {
                     balanced = avl.getBalanceFactor(avlArr)
                     animation.push({tree: snapshot(avlArr)})
                 }
-                console.log(snapshot(avlArr), lastPtr, 'after')
             }
             maxHeight = Math.max(maxHeight, avl.getHeight(snapshot(avlArr)))
         }
         let height = avl.getHeight(avlArr)
-        console.log(maxHeight)
         return {avlArr, animation, height, maxHeight}
     },
 
@@ -88,7 +85,6 @@ let avl = {
         let isBalanced = false
         while (parentPtr(ptr)>=0) {
             ptr = parentPtr(ptr)
-            console.log('current', avlArray[ptr])
             if (isBalanced) continue
             if(avlArray[ptr].bf > 1) {
                 if(avl.isNode(avlArray[leftPtr(ptr)]) && avlArray[leftPtr(ptr)].bf>0){
@@ -114,7 +110,6 @@ let avl = {
     },
     rotateLL: (avlArray, ptr) => {
         let avlSnapshot = snapshot(avlArray)
-        console.log('ll', avlSnapshot[ptr], ptr)
         let lPtr = leftPtr(ptr)
         let rPtr = rightPtr(ptr)
         let leftOfLeftPtr = leftPtr(leftPtr(ptr))
@@ -131,7 +126,6 @@ let avl = {
     },
     rotateRR: (avlArray, ptr) => {
         let avlSnapshot = snapshot(avlArray)
-        console.log('rr', avlSnapshot[ptr], ptr)
         let lPtr = leftPtr(ptr)
         let rPtr = rightPtr(ptr)
         let leftOfLeftPtr = leftPtr(leftPtr(ptr))
@@ -148,7 +142,6 @@ let avl = {
     },
     rotateLR: (avlArray, ptr) => {
         let avlSnapshot = snapshot(avlArray)
-        console.log('lr', avlSnapshot[ptr], ptr)
         let lPtr = leftPtr(ptr)
         let rPtr = rightPtr(ptr)
         let leftOfLeftPtr = leftPtr(leftPtr(ptr))
@@ -169,7 +162,6 @@ let avl = {
     },
     rotateRL: (avlArray, ptr) => {
         let avlSnapshot = snapshot(avlArray)
-        console.log('rl', avlSnapshot[ptr], ptr)
         let lPtr = leftPtr(ptr)
         let rPtr = rightPtr(ptr)
         let leftOfLeftPtr = leftPtr(leftPtr(ptr))
