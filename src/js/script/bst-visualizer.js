@@ -66,14 +66,7 @@ let bstVisualizer = {
                     <div id="node" class="node">${tree[ptr].data}`+balanceFactor+`</div>
                 `
         if (ptr>0) {
-            let parentNode = document.getElementById('bst_cell_'+parentPtr(ptr)).querySelector('.node')
-            let nodeDom = cell.querySelector('.node')
-            let angle = slopAngleOfPoints(getOffset(nodeDom), getOffset(parentNode))
-            let distance = distanceBetweenPoints(getOffset(nodeDom), getOffset(parentNode))
-            let nodeLink = cell.querySelector('.node-link')
-            nodeLink.style.height = (distance*0.5)+'px'
-            nodeLink.style.transform = direction==='l' ? 'rotate('+(angle-90)+'deg)' : 'rotate('+(angle-90)+'deg)'
-            nodeLink.style.transformOrigin = direction==='l' ? 'right top' : 'left top'
+            bstVisualizer.positionNodeLink(ptr, cell, direction)
         }
     },
     highLightPlottedKeys: (keysPlotted) => {
@@ -84,6 +77,16 @@ let bstVisualizer = {
             let keyDom = document.getElementById('key_'+index)
             keyDom.classList.add('inserted')
         })
+    },
+    positionNodeLink: (ptr, cell, direction) => {
+        let parentNode = document.getElementById('bst_cell_'+parentPtr(ptr)).querySelector('.node')
+        let nodeDom = cell.querySelector('.node')
+        let angle = slopAngleOfPoints(getOffset(nodeDom), getOffset(parentNode))
+        let distance = distanceBetweenPoints(getOffset(nodeDom), getOffset(parentNode))
+        let nodeLink = cell.querySelector('.node-link')
+        nodeLink.style.height = (distance*0.5)+'px'
+        nodeLink.style.transform = direction==='l' ? 'rotate('+(angle-90)+'deg)' : 'rotate('+(angle-90)+'deg)'
+        nodeLink.style.transformOrigin = direction==='l' ? 'right top' : 'left top'
     }
 }
 
