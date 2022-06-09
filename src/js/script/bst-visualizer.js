@@ -1,6 +1,6 @@
 import config from "./config";
 import {sleep, getOffset, distanceBetweenPoints, slopAngleOfPoints} from "./helper"
-import {leftPtr, rightPtr, parentPtr, isNode} from "./helper"
+import {getSleepTime, leftPtr, rightPtr, parentPtr, isNode} from "./helper"
 
 let bstVisualizer = {
     run:  async (rootNode, treeHeight, maxHeight, animation) =>{
@@ -17,10 +17,10 @@ let bstVisualizer = {
             if(set.index||set.index===0) keysPlotted.push(config.keys[set.index])
             messageArea.innerHTML = `<p class="message">BST Visualizer | Current Node: ${config.keys[set.index]}</p>`
             bstVisualizer.highLightPlottedKeys(keysPlotted)
-            await sleep(config.sleepBase)
+            await sleep(getSleepTime(config.sleepBase, config.speedMin, config.speedMax, config.speedValue))
             bstVisualizer.clearCells()
             bstVisualizer.plotTrees(set.tree)
-            await sleep(config.sleepBase)
+            await sleep(getSleepTime(config.sleepBase, config.speedMin, config.speedMax, config.speedValue))
             messageArea.innerHTML = `<p class="message">BST Visualizer | Plotting Done | Tree Height: ${treeHeight}</p>`
         }
     },
