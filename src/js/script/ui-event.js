@@ -65,6 +65,7 @@ function handleVisualizeButton() {
     let visualizeButton = document.getElementById('visualize_btn')
     visualizeButton.addEventListener('click', async () => {
         if (config.mode===config.modes.initial||config.mode===config.modes.done){
+            config.mode = config.modes.running
             if (config.selectedTrees.includes('bst')){
                 let bstOutput = bst.create(config.keys)
                 config.bstArray = bstOutput.node
@@ -79,6 +80,7 @@ function handleVisualizeButton() {
                 config.avlHeight = avlOutput.height
                 await avlVisualizer.run(config.avlArray, config.avlHeight, avlOutput.maxHeight, config.avlAnimation)
             }
+            config.mode = config.modes.done
         }
     })
 }
