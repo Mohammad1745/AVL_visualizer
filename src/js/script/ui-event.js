@@ -7,23 +7,30 @@ import avlVisualizer from "./avl-visualizer";
 
 export default function handleUiEvents() {
     handleSizeSlider()
+    handleSpeedSlider()
     handleTreeCheckbox()
     handleVisualizeButton()
     handleResetButton()
 }
 function handleSizeSlider () {
-    let sizeSlider = document.getElementById('slider_input')
+    let sizeSlider = document.getElementById('slider_size_input')
     sizeSlider.addEventListener('input', event => {
         if (config.mode===config.modes.initial||config.mode===config.modes.done){
-            config.sliderValue = sizeSlider.value
-            config.keys = generateArray(config.sliderValue, true)
+            config.sizeValue = sizeSlider.value
+            config.keys = generateArray(config.sizeValue, true)
             updateKeyList()
         }
     })
 }
+function handleSpeedSlider () {
+    let speedSlider = document.getElementById('slider_speed_input')
+    speedSlider.addEventListener('input', event => {
+        config.speedValue = speedSlider.value
+    })
+}
 function updateKeyList() {
     let keys = document.getElementById('subheader_keys')
-    let keyList = `<div><span>Keys(${config.sliderValue}): </span>`
+    let keyList = `<div><span>Keys(${config.sizeValue}): </span>`
     for (let i=0; i<config.keys.length; i++) keyList += `<span id="key_${i}" class="subheader__keys__item">${config.keys[i]}</span>`
     keyList += `</div>`
     keys.innerHTML = keyList
@@ -88,7 +95,7 @@ function handleResetButton() {
     let resetButton = document.getElementById('reset_btn')
     resetButton.addEventListener('click', () => {
         if (config.mode===config.modes.initial||config.mode===config.modes.done){
-            config.keys = generateArray(config.sliderValue, true)
+            config.keys = generateArray(config.sizeValue, true)
             updateKeyList()
             bstVisualizer.clearCells()
             avlVisualizer.clearCells()

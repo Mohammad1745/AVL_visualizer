@@ -33,11 +33,11 @@ function loadRangeSlider() {
     rangeSlider.innerHTML = `
         <div class="header__sliders__size">
             <div id="slider_title_size" class="header__sliders__size__title">Size</div>
-            <input type="range" min="${config.sizeMin}" max="${config.sizeMax}" value="${config.sizeValue}"  id="slider_input_size" class="header__sliders__size__input">
+            <input type="range" min="${config.sizeMin}" max="${config.sizeMax}" value="${config.sizeValue}"  id="slider_size_input" class="header__sliders__size__input">
         </div>
         <div class="header__sliders__speed">
             <div id="slider_title_speed" class="header__sliders__speed__title">Speed</div>
-            <input type="range" min="${config.speedMin}" max="${config.speedMax}" value="${config.speedValue}"  id="slider_input_speed" class="header__sliders__speed__input">
+            <input type="range" min="${config.speedMin}" max="${config.speedMax}" value="${config.speedValue}"  id="slider_speed_input" class="header__sliders__speed__input">
         </div>
         
     `
@@ -74,9 +74,9 @@ function loadTreeOptions() {
     })
 }
 function loadKeyList() {
-    config.keys = generateArray(config.sliderValue, true)
+    config.keys = generateArray(config.sizeValue, true)
     let keys = document.getElementById('subheader_keys')
-    let keyList = `<div><span>Keys(${config.sliderValue}): </span>`
+    let keyList = `<div><span>Keys(${config.sizeValue}): </span>`
     for (let i=0; i<config.keys.length; i++) keyList += `<span id="key_${i}" class="subheader__keys__item">${config.keys[i]}</span>`
     keyList += `</div>`
     keys.innerHTML = keyList
