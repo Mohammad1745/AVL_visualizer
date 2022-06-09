@@ -1,6 +1,6 @@
 import config from "./config";
 import {sleep, getOffset, distanceBetweenPoints, slopAngleOfPoints} from "./helper"
-import {leftPtr, rightPtr, parentPtr, isNode} from "./helper"
+import {getSleepTime, leftPtr, rightPtr, parentPtr, isNode} from "./helper"
 import avl from "../data_structure/avl";
 
 let avlVisualizer = {
@@ -23,10 +23,10 @@ let avlVisualizer = {
                 messageArea.innerHTML = `<p class="message">AVL Visualizer | Rotation: ${set.rotation.title}</p>`
                 await avlVisualizer.performRotation(set.rotation)
             }
-            await sleep(config.sleepBase)
+            await sleep(getSleepTime(config.sleepBase, config.speedMin, config.speedMax, config.speedValue))
             avlVisualizer.clearCells()
             avlVisualizer.plotTrees(set.tree)
-            await sleep(config.sleepBase)
+            await sleep(getSleepTime(config.sleepBase, config.speedMin, config.speedMax, config.speedValue))
         }
         messageArea.innerHTML = `<p class="message">AVL Visualizer | Plotting Done | Tree Height: ${treeHeight}</p>`
     },
@@ -96,11 +96,11 @@ let avlVisualizer = {
         overlay.querySelector('#overlay_header').innerText = rotation.title + " Rotation"
         overlay.querySelector('#overlay_body').innerText = "Balance Factor of " + rotation.node.data + " Rotation is " + rotation.node.bf
 
-        await sleep(200)
+        await sleep(getSleepTime(config.sleepBase, config.speedMin, config.speedMax, config.speedValue)/2)
         rotation.movement.map(async movement => {
             await avlVisualizer.animateMovement(movement)
         })
-        await sleep(500)
+        await sleep(getSleepTime(config.sleepBase, config.speedMin, config.speedMax, config.speedValue))
         overlay.querySelector('#overlay_header').innerText = ''
         overlay.querySelector('#overlay_body').innerText = ''
     },
@@ -114,7 +114,8 @@ let avlVisualizer = {
         let nodePositions = [getOffset(nodeInitial), getOffset(nodeFinal)]
         let topMovement = nodePositions[1].top-nodePositions[0].top
         let leftMovement = nodePositions[1].left-nodePositions[0].left
-        nodeInitial.style.transition = "500ms"
+        let sleepTime = getSleepTime(config.sleepBase, config.speedMin, config.speedMax, config.speedValue)
+        nodeInitial.style.transition = sleepTime + "ms"
         nodeInitial.style.transform = "translate("+(leftMovement)+"px,"+(topMovement)+"px)"
     },
 }
