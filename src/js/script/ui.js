@@ -21,7 +21,7 @@ function loadHeaderContents() {
     let header = document.getElementById('header')
     header.innerHTML = `
         <div id="header_brand" class="header__brand">${config.headerBrand}</div>
-        <div id="header_range_slider" class="header__range-slider"></div>
+        <div id="header_range_slider" class="header__sliders"></div>
         <div id="header_buttons" class="header__buttons"></div>
     `
     loadRangeSlider()
@@ -31,8 +31,15 @@ function loadHeaderContents() {
 function loadRangeSlider() {
     let rangeSlider = document.getElementById('header_range_slider')
     rangeSlider.innerHTML = `
-        <div id="slider_title" class="header__range-slider__title">Size</div>
-        <input type="range" min="${config.sliderMin}" max="${config.sliderMax}" value="${config.sliderValue}"  id="slider_input" class="header__range-slider__input">
+        <div class="header__sliders__size">
+            <div id="slider_title_size" class="header__sliders__size__title">Size</div>
+            <input type="range" min="${config.sizeMin}" max="${config.sizeMax}" value="${config.sizeValue}"  id="slider_input_size" class="header__sliders__size__input">
+        </div>
+        <div class="header__sliders__speed">
+            <div id="slider_title_speed" class="header__sliders__speed__title">Speed</div>
+            <input type="range" min="${config.speedMin}" max="${config.speedMax}" value="${config.speedValue}"  id="slider_input_speed" class="header__sliders__speed__input">
+        </div>
+        
     `
 }
 

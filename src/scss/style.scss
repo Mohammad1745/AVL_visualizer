@@ -22,9 +22,16 @@ body {
     font-size: 1.25rem;
     font-weight: bold;
   }
-  &__range-slider{
-    &__title {
-      text-align: center;
+  &__sliders{
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+
+    &__size,
+    &__speed{
+      &__title {
+        text-align: center;
+      }
     }
   }
 
